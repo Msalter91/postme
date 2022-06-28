@@ -2,13 +2,13 @@
 
 //DB params
 define('DB_HOST', 'localhost');
-define('DB_USER', 'YOU_USER');
-define('DB_PASS', 'YOUR_PASS');
-define('DB_NAME', 'YOUR_DBNAME');
+define('DB_USER', 'root');
+define('DB_PASS', '123456');
+define('DB_NAME', 'postme');
 
 //App root
 define('APPROOT', dirname(__DIR__));
 //URL
-define('URLROOT', 'YOUR_URL');
+define('URLROOT', 'http://localhost/postme');
 //Sitename
-define('SITENAME', 'YOURSITENAME');
+define('SITENAME', 'postme');
