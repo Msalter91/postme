@@ -4,11 +4,17 @@ class Pages extends Controller
 {
     public function __construct() {
 
+        $this->postModel = $this->model('Post');
+
     }
 
     public function index() {
-        $data =  ['title'=> 'Stranger'];
+        $posts = $this->postModel->getPosts();
+        $data =  ['title'=> 'Stranger',
+        'posts' => $posts];
         $this->view('pages/index', $data);
+
+
     }
 
     public function about() {
