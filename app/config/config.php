@@ -12,3 +12,5 @@ define('APPROOT', dirname(__DIR__));
 define('URLROOT', 'http://localhost/postme');
 //Sitename
 define('SITENAME', 'postme');
+//Version
+define('APP_VERSION', '1.0.0');

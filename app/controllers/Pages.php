@@ -7,7 +7,8 @@ class Pages extends Controller
     }
 
     public function index() {
-        $data =  ['title'=> 'Postme'];
+        $data =  ['title'=> 'Postme',
+            'description' => 'Simple social network'];
 
         $this->view('pages/index', $data);
 
@@ -16,7 +17,8 @@ class Pages extends Controller
 
     public function about() {
         // Added default argument here to prevent error from an incorrect url
-        $data =  ['title'=> 'about'];
+        $data =  ['title'=> 'About',
+            'description' => 'An app to share your posts'];
         $this->view('pages/about', $data);
     }
 }
