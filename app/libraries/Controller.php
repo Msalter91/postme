@@ -5,6 +5,8 @@
  * This loads the models and views
  */
 
+// TODO Turn this into an abstract - currently no instances of this
+
 class Controller {
     // Load model
 

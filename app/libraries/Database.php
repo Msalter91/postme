@@ -7,14 +7,14 @@
  */
 
 class Database {
-    private $host = DB_HOST;
-    private $user = DB_USER;
-    private $pass = DB_PASS;
-    private $dbname = DB_NAME;
+    private string $host = DB_HOST;
+    private string $user = DB_USER;
+    private string $pass = DB_PASS;
+    private string $dbname = DB_NAME;
 
-    private $dbh;
-    private $stmt;
-    private $error;
+    private mixed $dbh;
+    private mixed $stmt;
+    private mixed $error;
 
     public function __construct()
     {
