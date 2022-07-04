@@ -14,6 +14,7 @@
           </li>
       </ul>
     </div>
+<!--Conditional rendering of Navbar items based on logged in status -->
       <?php if(!isset($_SESSION['user_id'])) : ?>
       <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">

@@ -1,6 +1,14 @@
 <?php
     session_start();
 
+function isLoggedIn(){
+    if(isset($_SESSION['user_id'])){
+        return True;
+    } else {
+        return False;
+    }
+}
+
 function flash($flash = '', $message = '', $class = 'alert alert-success') {
     //Checks to see if a flash and message have been entered but the flash not yet addded to the session
     //If that's the case, it then sets a value in the Session super global called Flash.
