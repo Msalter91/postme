@@ -11,6 +11,15 @@ class Post
     }
     // Add function to get single post and pass data
 
+    public function getPostById($id){
+        $this->db->query('SELECT * FROM posts WHERE id = :id');
+        $this->db->bind(':id', $id);
+
+        $row = $this->db->singleResult();
+
+        return $row;
+    }
+
     public function getPosts(){
         $this->db->query('SELECT *,
                                posts.id as postId,
