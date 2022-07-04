@@ -18,6 +18,8 @@
         <div class="bg-light p-2 mb-3">
             Written by <?= $posts->name ?> on <?= $posts->postsCreated ?>
         </div>
+        <p class="card-text"><?= $posts->body ?></p>
+        <a href="<?= URLROOT ?>/posts/show/<?=$posts->postId?>" class="btn btn-dark">More</a>
     </div>
 
 <?php endforeach; ?>
