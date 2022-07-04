@@ -7,6 +7,11 @@ class Pages extends Controller
     }
 
     public function index() {
+
+        if(isLoggedIn()){
+            redirect('posts');
+        }
+
         $data =  ['title'=> 'Postme',
             'description' => 'Simple social network'];
 

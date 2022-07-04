@@ -30,6 +30,20 @@ class Post
 
     // Add function to add post
 
+    public function addPost($data) {
+        $this->db->query('INSERT INTO posts (title, body, user_id) VALUES (:title, :body, :user_id)');
+
+        $this->db->bind(':title', $data['title']);
+        $this->db->bind(':body', $data['body']);
+        $this->db->bind(':user_id', $data['user_id']);
+
+        if($this->db->execute()){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     // Add function to edit post
 
     // Add function to delete post

@@ -17,11 +17,9 @@
                 <?= (!empty($data['password_error'])) ? "is-invalid" : "" ?>" id="password" name="password">
                     <span class="invalid-feedback"><?= (!empty($data['password_error'])) ? "Password invalid" : "" ?></span>
                 </div>
-                <div class="row">
                     <div class="col">
                         <input type="submit" value="Login" class="btn btn-success btn block">
                     </div>
-                </div>
             </form>
         </div>
 
