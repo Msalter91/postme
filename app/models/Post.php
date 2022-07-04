@@ -55,5 +55,19 @@ class Post
 
     // Add function to edit post
 
+    public function updatePost($data) {
+        $this->db->query('UPDATE posts SET title = :title, body = :body WHERE id = :id');
+
+        $this->db->bind(':title', $data['title']);
+        $this->db->bind(':body', $data['body']);
+        $this->db->bind(':id', $data['id']);
+
+        if($this->db->execute()){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     // Add function to delete post
 }

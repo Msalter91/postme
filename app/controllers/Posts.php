@@ -68,6 +68,56 @@ class Posts extends Controller
         }
     }
 
+    public function edit($id) {
+
+        if($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+            $data = [
+                'id' => $id,
+                'title' => trim($_POST['title']),
+                'body' => trim($_POST['body']),
+                'user_id' => $_SESSION['user_id'],
+                'title_error' => '',
+                'body_error' => ''
+            ];
+
+            //validate the title
+
+            if(empty($data['title'])){
+                $data['title_error'] = 'Please enter a title';
+            }
+
+            if(empty($data['body'])){
+                $data['body_error'] = 'Please enter some text';
+            }
+
+            if(empty($data['title_error'])  && empty($data['body_error'])){
+                if($this->postModel->updatePost($data)){
+                    flash('post_message', 'Post updated');
+                    redirect('/posts');
+                } else {
+                    die('There has been an error');
+                }
+            } else {
+                $this->view('posts/edit', $data);
+            }
+
+        } else {
+            //Get existing post form model
+            $post = $this->postModel->getPostById($id);
+            //Check ownership
+            if($post->user_id != $_SESSION['user_id']){
+                redirect('posts');
+            }
+            $data = ["title" => $post->title,
+                "body" => $post->body,
+                'id' => $id
+            ];
+
+            $this->view('posts/edit', $data);
+        }
+    }
+
     public function show($id) {
 
         $post = $this->postModel->getPostbyId($id);

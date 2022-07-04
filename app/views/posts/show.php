@@ -3,17 +3,18 @@
 <h1><?=$data['post']->title ?></h1>
 
 <div class="bg-secondary text-white p-2 mb-3">
-    <p>Written By <?= $data['user']->name?> on <?=$data['post']->created_at ?> </p>
+    <p>Written By <?= htmlspecialchars($data['user']->name)?> on <?=htmlspecialchars($data['post']->created_at) ?> </p>
 </div>
 
 <p>
-    <?= $data['post']->body ?>
+    <?= htmlspecialchars($data['post']->body) ?>
 </p>
 
 <?php
 if($data['post']->user_id == $_SESSION['user_id']) : ?>
 <hr>
     <a href="<?= URLROOT?>/posts/edit/<?=$data['post']->id?>" class="btn btn-dark">Edit</a>
+<!--Make sure this is secure!-->
 <form class="float-end" action="<?=URLROOT?>/posts/delete/<?=$data['post']->id?>" method="post">
     <input type="submit" value="delete" class="btn btn-danger">
 </form>

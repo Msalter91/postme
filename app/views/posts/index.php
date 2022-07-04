@@ -13,13 +13,13 @@
 <?php foreach($data['posts'] as $posts) :?>
     <div class="card card-body mb-3">
         <h4 class="card-title">
-            <?=$posts->title ?>
+            <?=htmlspecialchars($posts->title) ?>
         </h4>
         <div class="bg-light p-2 mb-3">
-            Written by <?= $posts->name ?> on <?= $posts->postsCreated ?>
+            Written by <?= htmlspecialchars($posts->name) ?> on <?= htmlspecialchars($posts->postsCreated) ?>
         </div>
-        <p class="card-text"><?= $posts->body ?></p>
-        <a href="<?= URLROOT ?>/posts/show/<?=$posts->postId?>" class="btn btn-dark">More</a>
+        <p class="card-text"><?= htmlspecialchars($posts->body) ?></p>
+        <a href="<?= URLROOT ?>/posts/show/<?=htmlspecialchars($posts->postId)?>" class="btn btn-dark">More</a>
     </div>
 
 <?php endforeach; ?>
