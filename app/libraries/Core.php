@@ -8,8 +8,9 @@ class Core {
 
     // Sets the defaults of the app to be the Pages Index page (i.e. home)
 
-    protected mixed $currentController = 'Pages';
+    protected mixed $currentController = 'Index';
     protected string $currentMethod = 'index';
+    protected string $currentControllerDirectory;
     protected $params = [];
 
     public function __construct(){
@@ -29,28 +30,34 @@ class Core {
 
         $url = $this->getUrl();
 
-        if(isset($url[0])) {
-            if(file_exists('../app/controllers/' . ucwords($url[0]). '.php')){
+        if(isset($url[0]) && isset($url[1])) {
+            if(file_exists('../app/code/' . ucwords($url[0]). '/Controllers/' . $url[1] .  '.php')){
                 // If exists, set as controller
-                $this->currentController = ucwords($url[0]);
+                //Set the directory from URL[0]
+                $this->currentControllerDirectory = ucwords($url[0]);
+                // Sets the property of the controller as the second part of the URL
+                $this->currentController = ucwords($url[1]);
                 // Unset 0 Index
                 unset($url[0]);
+                unset($url[1]);
             }
         }
 
         // Require the controller
-        require_once '../app/controllers/'. $this->currentController . '.php';
+        require_once '../app/code/' . $this->currentControllerDirectory . '/Controllers/' . $this->currentController .  '.php';
+
+
 
         // Instantiate controller class
         $this->currentController = new $this->currentController;
 
         // Check for second part of url
-        if(isset($url[1])){
+        if(isset($url[2])){
             // Check to see if method exists in controller
-            if(method_exists($this->currentController, $url[1])){
-                $this->currentMethod = $url[1];
+            if(method_exists($this->currentController, $url[2])){
+                $this->currentMethod = $url[2];
                 // Unset 1 index
-                unset($url[1]);
+                unset($url[2]);
             }
         }
 

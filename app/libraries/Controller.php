@@ -12,7 +12,8 @@ class Controller {
 
     public function model ($model){
         //require the model that we want
-        require_once '../app/models/' . $model . '.php';
+//        require_once '../app/models/' . $model . '.php';
+        require_once '../app/code/' . ucwords($model) .'/Model/' . $model . '.php';
 
         // Create a new instance of that model
 
