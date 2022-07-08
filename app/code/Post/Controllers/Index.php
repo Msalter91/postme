@@ -1,27 +1,22 @@
 <?php
 
+
+
 class Index extends Controller
 {
 
     protected ?object $postModel = null;
 
-    public function __construct()
-    {
-        if(!isLoggedIn()){
-            redirect('users/login');
-        }
-        //TODO Wouldn't we want a flash message here? Otherwise it seems like a random redirect
+    public function index(){
+        $repositoryPost = new PostRepository();
+        $results = $repositoryPost->getList();
 
-        $this->postModel = $this->model('Post');
-        $this->userModel = $this->model('User');
-    }
-
-    public function index() {
-        $posts = $this->postModel->getPosts();
         $data = [
-            'posts' => $posts
+            'posts' => $results
         ];
+
         $this->view('posts/index', $data);
+
     }
 
     public function add() {
@@ -29,32 +24,40 @@ class Index extends Controller
         if($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             //sanitize
+            $post = new Post;
 
+            $post->setTitle(trim($_POST['title']));
+            $post->setBody(trim($_POST['body']));
+            $post->setUserId($_SESSION['user_id']);
             $data = [
-                'title' => trim($_POST['title']),
-                'body' => trim($_POST['body']),
-                'user_id' => $_SESSION['user_id'],
                 'title_error' => '',
                 'body_error' => ''
             ];
 
             //validate the title
 
-            if(empty($data['title'])){
+            if(empty($_POST['title'])){
                 $data['title_error'] = 'Please enter a title';
             }
 
-            if(empty($data['body'])){
+            if(empty($_POST['body'])){
                 $data['body_error'] = 'Please enter some text';
             }
+            $data['body'] = $post->getBody();
+            $data['title'] = $post->getTitle();
+
+
+            $repositoryPost = new PostRepository();
 
             if(empty($data['title_error'])  && empty($data['body_error'])){
-                if($this->postModel->addPost($data)){
+                if($repositoryPost->save($post)){
                     flash('post_message', 'Post added');
-                    redirect('/posts');
+                    redirect('/post/index/index');
+
                 } else {
                     die('There has been an error');
                 }
+
             } else {
                 $this->view('posts/add', $data);
             }
@@ -120,13 +123,17 @@ class Index extends Controller
 
     public function show($id) {
 
-        $post = $this->postModel->getPostbyId($id);
+        $RepositoryPost = new PostRepository();
+        $result = $RepositoryPost->getById($id);
 
-        //TODO This seems silly, we wouldn't we just do a join?
-        $user = $this->userModel->getUserById($post->user_id);
+        $user = '1';
 
-        $data = ['post' => $post,
-            'user' => $user
+        $data = ['body' => $result->getBody(),
+                'title' => $result->getTitle(),
+                'id' => $result->getId(),
+            'user' => $user,
+            'created_at' => $result->getCreatedAt(),
+            'user_id' => $result->getUserId()
         ];
 
         $this->view('posts/show', $data);
