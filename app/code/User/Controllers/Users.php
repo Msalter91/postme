@@ -19,7 +19,7 @@ class Users extends Controller
         $_SESSION['user_email'] = $user->email;
         $_SESSION['user_name'] = $user->name;
         //TODO Nothing to prevent session fixation attacks here!
-        redirect('pages/index');
+        redirect('pages/index/index');
     }
 
     public function register(){
@@ -69,7 +69,7 @@ class Users extends Controller
 
                 if($this->userModel->register($data)){
                     flash('register_success', 'You are now registered');
-                    redirect('users/login');
+                    redirect('user/users/login');
                 } else {
                     die('Something has gone wrong');
                 }
@@ -158,6 +158,6 @@ class Users extends Controller
         unset($_SERVER['user_name']);
         unset($_SERVER['user_email']);
         session_destroy();
-        redirect('users/login');
+        redirect('/User/Users/login');
     }
 }

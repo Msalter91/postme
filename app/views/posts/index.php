@@ -5,7 +5,7 @@
         <h1>Posts</h1>
     </div>
     <div class="col md-6">
-        <a href="<?= URLROOT ?>/posts/add" class="btn btn-primary pull-right">
+        <a href="<?= URLROOT ?>/post/index/add" class="btn btn-primary pull-right">
             <i class="fa-solid fa-pencil"></i> Add post
         </a>
     </div>
@@ -19,7 +19,7 @@
             Written by <?= htmlspecialchars($posts->name) ?> on <?= htmlspecialchars($posts->postsCreated) ?>
         </div>
         <p class="card-text"><?= htmlspecialchars($posts->body) ?></p>
-        <a href="<?= URLROOT ?>/posts/show/<?=htmlspecialchars($posts->postId)?>" class="btn btn-dark">More</a>
+        <a href="<?= URLROOT ?>/post/index/show/<?=htmlspecialchars($posts->postId)?>" class="btn btn-dark">More</a>
     </div>
 
 <?php endforeach; ?>

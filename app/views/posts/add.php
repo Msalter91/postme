@@ -5,7 +5,7 @@
             <div class="card-body md-6">
                 <h2>Add a new post</h2>
                 <p>Create a new post</p>
-                <form action="<?= URLROOT ?>/posts/add" method="post">
+                <form action="<?= URLROOT ?>/post/index/add" method="post">
                     <div class="mb-3">
                         <label for="title" class="form-label ">Title<sup>*</sup></label>
                         <input type="text" class="form-control

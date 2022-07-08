@@ -6,11 +6,11 @@
  */
 class Core {
 
-    // Sets the defaults of the app to be the Pages Index page (i.e. home)
+    // Sets the defaults of the app to be the Index Index page (i.e. home)
 
     protected mixed $currentController = 'Index';
     protected string $currentMethod = 'index';
-    protected string $currentControllerDirectory;
+    protected string $currentControllerDirectory = 'Pages';
     protected $params = [];
 
     public function __construct(){
@@ -30,17 +30,20 @@ class Core {
 
         $url = $this->getUrl();
 
-        if(isset($url[0]) && isset($url[1])) {
-            if(file_exists('../app/code/' . ucwords($url[0]). '/Controllers/' . $url[1] .  '.php')){
+        if(isset($url[0])) {
+            if(file_exists('../app/code/' . ucwords($url[0]) . '/Controllers/' . $url[1] .  '.php')){
                 // If exists, set as controller
+
                 //Set the directory from URL[0]
                 $this->currentControllerDirectory = ucwords($url[0]);
-                // Sets the property of the controller as the second part of the URL
-                $this->currentController = ucwords($url[1]);
                 // Unset 0 Index
                 unset($url[0]);
-                unset($url[1]);
             }
+        }
+
+        if(isset($url[1])){
+            $this->currentController = ucwords($url[1]);
+            unset($url[1]);
         }
 
         // Require the controller

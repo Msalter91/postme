@@ -13,9 +13,9 @@
 <?php
 if($data['post']->user_id == $_SESSION['user_id']) : ?>
 <hr>
-    <a href="<?= URLROOT?>/posts/edit/<?=$data['post']->id?>" class="btn btn-dark">Edit</a>
+    <a href="<?= URLROOT?>/post/index/edit/<?=$data['post']->id?>" class="btn btn-dark">Edit</a>
 <!--Make sure this is secure!-->
-<form class="float-end" action="<?=URLROOT?>/posts/delete/<?=$data['post']->id?>" method="post">
+<form class="float-end" action="<?=URLROOT?>/post/index/delete/<?=$data['post']->id?>" method="post">
     <input type="submit" value="delete" class="btn btn-danger">
 </form>
 

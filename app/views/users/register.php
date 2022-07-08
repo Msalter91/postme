@@ -3,7 +3,7 @@
     <div class="card card-body mx-auto md-6">
         <div class="card-body mx-auto md-6">
             <h2>Register for an account</h2>
-            <form action="<?= URLROOT ?>/users/register" method="post">
+            <form action="<?= URLROOT ?>/user/users/register" method="post">
                 <div class="mb-3">
                     <label for="name" class="form-label ">Name<sup>*</sup></label>
                     <input type="text" class="form-control
@@ -36,7 +36,7 @@
                     </div>
 
                     <div class="col">
-                        <a href="<?= URLROOT ?>/users/login" class="btn btn-light btn-block">Have an account? Login</a>
+                        <a href="<?= URLROOT ?>/user/users/login" class="btn btn-light btn-block">Have an account? Login</a>
                     </div>
                 </div>
             </form>

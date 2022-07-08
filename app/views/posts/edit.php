@@ -4,7 +4,7 @@
         <div class="card">
             <div class="card-body md-6">
                 <h2>Edit your post</h2>
-                <form action="<?= URLROOT ?>/posts/edit/<?=$data['id']?>" method="post">
+                <form action="<?= URLROOT ?>/post/index/edit/<?=$data['id']?>" method="post">
                     <div class="mb-3">
                         <label for="title" class="form-label ">Title<sup>*</sup></label>
                         <input type="text" class="form-control

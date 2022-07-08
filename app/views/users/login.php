@@ -4,7 +4,7 @@
         <div class="card-body mx-auto md-6">
             <?php flash('register_success')?>
             <h2>Login</h2>
-            <form action="<?= URLROOT ?>/users/login" method="post">
+            <form action="<?= URLROOT ?>/user/Users/login" method="post">
                 <div class="mb-3">
                     <label for="email" class="form-label ">Email<sup>*</sup></label>
                     <input type="email" class="form-control

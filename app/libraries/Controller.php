@@ -29,7 +29,7 @@ class Controller {
         } else {
             //If view does not exist
             //TODO Add some error handling
-            die('View does not exist');
+            die($view);
         }
     }
 }
