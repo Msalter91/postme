@@ -49,8 +49,6 @@ class Core {
         // Require the controller
         require_once '../app/code/' . $this->currentControllerDirectory . '/Controllers/' . $this->currentController .  '.php';
 
-
-
         // Instantiate controller class
         $this->currentController = new $this->currentController;
 

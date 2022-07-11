@@ -14,8 +14,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="body" class="form-label ">Body<sup>*</sup></label>
-                        <textarea name="body" class="form-control
-                <?= (!empty($data['body_error'])) ? "is-invalid" : "" ?>" id="body"> <?= $data['body']?> </textarea>
+                        <textarea name="body" class="form-control <?=(!empty($data['body_error'])) ? "is-invalid" : "" ?>" id="body"><?= $data['body']?></textarea>
                         <span class="invalid-feedback"><?= (!empty($data['body_error'])) ? "There was an error" : "" ?></span>
                     </div>
                     <div class="row">

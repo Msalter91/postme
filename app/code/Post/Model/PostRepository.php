@@ -33,9 +33,18 @@ class PostRepository implements PostRepositoryInterface
 
     }
 
-    public function deleteById(int $id): void
+    public function deleteById(int $id): bool
     {
-        // TODO: Implement deleteById() method.
+        $this->db->query('DELETE FROM posts where id = :id');
+
+        $this->db->bind(':id', $id);
+
+        if($this->db->execute()) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     public function save(Post $post): ?Post
