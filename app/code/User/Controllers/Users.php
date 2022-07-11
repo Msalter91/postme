@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
+
 class Users extends Controller
 
 {
-
     protected ?object $userModel = null;
 
-    public function __construct()
-    {
-        $this->userModel = $this->model('User');
-    }
+//    public function __construct()
+//    {
+//        $this->userModel = $this->model('User');
+//    }
     public function createUserSession($user){
         //TODO Writing strings (poss 255 chars) to three session variables will be slow! Can this be replaced with a Bool?
         $_SESSION['user_id'] = $user->id;
@@ -25,9 +25,10 @@ class Users extends Controller
         //Check for post
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
-            //! Changed to have htmlspecialchars
+            $userToCreate = new User();
+
             $data=[
-                'name' => (trim($_POST['name'])),
+                'name' = (trim($_POST['name'])),
                 'email' => (trim($_POST['email'])),
                 'password' => (trim($_POST['password'])),
                 'confirm_password' => (trim($_POST['confirm_password'])),
@@ -80,18 +81,16 @@ class Users extends Controller
         } else {
             // Load the form
             // Initialise the data
-            //TODO Change this to an associative array! This is hideous
-            $data=[
-                'name' => '',
-                'email' => '',
-                'password' => '',
-                'confirm_password' => '',
+
+            $user = new User();
+
+            $errors=[
                 'name_error' => '',
                 'email_error' => '',
                 'password_error' => '',
                 'confirm_password_error' => ''
             ];
-            $this->view('users/register', $data);
+            $this->view('users/register', $user);
         }
     }
 
@@ -158,4 +157,5 @@ class Users extends Controller
         session_destroy();
         redirect('/User/Users/login');
     }
+
 }

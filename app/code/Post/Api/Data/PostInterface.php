@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-interface PostInterface {
-
+interface PostInterface
+{
     public const ID = 'id';
     public const USERID = 'user_id';
     public const TITLE = 'title';
@@ -24,6 +24,4 @@ interface PostInterface {
 
     public function getCreatedAt() :string;
     public function setCreatedAt(string $datetime);
-
-
 }

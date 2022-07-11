@@ -26,4 +26,9 @@ class Index extends Controller
             'description' => 'An app to share your posts'];
         $this->view('pages/about', $data);
     }
+
+    public function error() {
+        $data = [];
+        $this->view('pages/error', $data);
+    }
 }

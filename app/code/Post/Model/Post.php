@@ -2,10 +2,7 @@
 
 declare(strict_types=1);
 
-//include '../Api/Data/PostInterface.php';
-
 class Post implements PostInterface
-
 {
 
     private array $data = [];
@@ -60,11 +57,13 @@ class Post implements PostInterface
         $this->__set(self::CREATEDAT, $datetime);
     }
 
-    public function __set($name, $value) {
+    public function __set($name, $value)
+    {
         $this->data[$name] = $value;
     }
 
-    public function __get($name) {
+    public function __get($name)
+    {
         if (!array_key_exists($name, $this->data)) {
             return null;
         }

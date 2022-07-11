@@ -9,7 +9,12 @@ class Index extends Controller
 
     public function index(){
         $repositoryPost = new PostRepository();
-        $results = $repositoryPost->getList();
+        try{
+            $results = $repositoryPost->getList();
+        } catch (Exception $e) {
+            flash('post_message', $e->getMessage(), 'alert alert-danger');
+            redirect('pages/index/error');
+        }
 
         $data = [
             'posts' => $results
@@ -43,18 +48,16 @@ class Index extends Controller
             if(empty($_POST['body'])){
                 $errors['body_error'] = 'Please enter some text';
             }
-//            $data['body'] = $post->getBody();
-//            $data['title'] = $post->getTitle();
 
             $repositoryPost = new PostRepository();
 
             if(empty($errors['title_error'])  && empty($errors['body_error'])){
-                if($repositoryPost->save($post)){
-                    flash('post_message', 'Post added');
-                    redirect('/post/index/index');
-
-                } else {
-                    die('There has been an error');
+                try{
+                    $repositoryPost->save($post);
+                    redirect('/posts/index/index');
+                } catch(Exception $e) {
+                    flash('post_message', $e->getMessage(), 'alert alert-danger');
+                    redirect('/posts/index/index');
                 }
 
             } else {
@@ -80,14 +83,6 @@ class Index extends Controller
             $editedPost->setId($id);
             $editedPost->setUserId($_SESSION['user_id']);
 
-
-            $data = [
-                'id' => $id,
-                'title' => $editedPost->getTitle(),
-                'body' => $editedPost->getBody(),
-                'user_id' => $_SESSION['user_id'],
-            ];
-
             $errors = [
                 'title_error' => '',
                 'body_error' => ''
@@ -107,12 +102,12 @@ class Index extends Controller
 
                 $submissionRepositoryPost = new PostRepository();
 
-
-                if($submissionRepositoryPost->save($editedPost)){
-                    flash('post_message', 'Post updated');
+                try{
+                    $submissionRepositoryPost->save($editedPost);
                     redirect('/posts/index/index');
-                } else {
-                    die('There has been an error');
+                } catch(Exception $e) {
+                    flash('post_message', $e->getMessage(), 'alert alert-danger');
+                    redirect('/posts/index/index');
                 }
 
             } else {
@@ -128,10 +123,6 @@ class Index extends Controller
             if($post->getUserId()!= $_SESSION['user_id']){
                 redirect('posts/index/index');
             }
-            $data = ["title" => $post->getTitle(),
-                "body" => $post->getBody(),
-                'id' => $id
-            ];
 
             $this->view('posts/edit', $post);
         }
@@ -140,11 +131,13 @@ class Index extends Controller
     public function show($id) {
 
         $RepositoryPost = new PostRepository();
-        $result = $RepositoryPost->getById($id);
-
-        $user = '1';
-
-        $this->view('posts/show', $result);
+        try {
+            $result = $RepositoryPost->getById($id);
+            $this->view('posts/show', $result);
+        } catch (Exception $e){
+            flash('post_message', $e->getMessage(), 'alert alert-danger');
+            redirect('pages/index/index');
+        }
     }
 
     public function delete($id) {

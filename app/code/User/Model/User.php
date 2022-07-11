@@ -1,7 +1,8 @@
 <?php
 
-class User {
-    private $db;
+class User implements UserInterface {
+    private ?Database $db = null;
+    private array $data = [];
 
     public function __construct()
     {
@@ -57,5 +58,67 @@ class User {
         $row = $this->db->singleResult();
 
         return $row;
+    }
+
+    public function getId(): int
+    {
+        return (int) $this->__get(self::ID);
+    }
+
+    public function setId(int $id)
+    {
+        $this->__set(self::ID, $id);
+    }
+
+    public function getName(): string
+    {
+        // TODO: Implement getName() method.
+    }
+
+    public function setUserId(string $name)
+    {
+        // TODO: Implement setUserId() method.
+    }
+
+    public function getEmail(): string
+    {
+        // TODO: Implement getEmail() method.
+    }
+
+    public function setEmail(string $email)
+    {
+        // TODO: Implement setEmail() method.
+    }
+
+    public function getPassword(): string
+    {
+        // TODO: Implement getPassword() method.
+    }
+
+    public function setPassword(string $password)
+    {
+        // TODO: Implement setPassword() method.
+    }
+
+    public function getCreatedAt(): string
+    {
+        // TODO: Implement getCreatedAt() method.
+    }
+
+    public function setCreatedAt(string $datetime)
+    {
+        // TODO: Implement setCreatedAt() method.
+    }
+
+    public function __set($name, $value) {
+        $this->data[$name] = $value;
+    }
+
+    public function __get($name) {
+        if (!array_key_exists($name, $this->data)) {
+            return null;
+        }
+
+        return $this->data[$name];
     }
 }
