@@ -52,11 +52,15 @@ class PostRepository implements PostRepositoryInterface
         if(!$post->getCreatedAt()){
             $this->db->query('INSERT INTO posts (title, body, user_id) 
             VALUES (:title, :body, :user_id)');
+            $this->db->bind(':user_id', $post->getUserId());
+        } else {
+            $this->db->query('UPDATE posts SET title = :title, body = :body WHERE id = :id');
+            $this->db->bind(':id', $post->getId());
         }
 
         $this->db->bind(':title', $post->getTitle());
         $this->db->bind(':body', $post->getBody());
-        $this->db->bind(':user_id', $post->getUserId());
+
 
         if($this->db->execute()){
             return $post;

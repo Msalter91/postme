@@ -46,8 +46,6 @@ class Index extends Controller
             $data['body'] = $post->getBody();
             $data['title'] = $post->getTitle();
 
-
-
             $repositoryPost = new PostRepository();
 
             if(empty($data['title_error'])  && empty($data['body_error'])){
@@ -76,6 +74,14 @@ class Index extends Controller
 
         if($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+            $editedPost = new Post();
+
+            $editedPost->setTitle(trim($_POST['title']));
+            $editedPost->setBody(trim($_POST['body']));
+            $editedPost->setId($id);
+            $editedPost->setUserId($_SESSION['user_id']);
+
+
             $data = [
                 'id' => $id,
                 'title' => trim($_POST['title']),
@@ -96,25 +102,32 @@ class Index extends Controller
             }
 
             if(empty($data['title_error'])  && empty($data['body_error'])){
-                if($this->postModel->updatePost($data)){
+
+                $submissionRepositoryPost = new PostRepository();
+
+
+                if($submissionRepositoryPost->save($editedPost)){
                     flash('post_message', 'Post updated');
-                    redirect('/posts');
+                    redirect('/posts/index/index');
                 } else {
                     die('There has been an error');
                 }
+
             } else {
                 $this->view('posts/edit', $data);
             }
 
         } else {
             //Get existing post form model
-            $post = $this->postModel->getPostById($id);
+            $respositoryPost = new PostRepository();
+            $post = $respositoryPost->getById($id);
+
             //Check ownership
-            if($post->user_id != $_SESSION['user_id']){
-                redirect('posts');
+            if($post->getUserId()!= $_SESSION['user_id']){
+                redirect('posts/index/index');
             }
-            $data = ["title" => $post->title,
-                "body" => $post->body,
+            $data = ["title" => $post->getTitle(),
+                "body" => $post->getBody(),
                 'id' => $id
             ];
 
@@ -144,8 +157,8 @@ class Index extends Controller
 
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
-            $RepositoryPost = new PostRepository();
-            $post = $RepositoryPost->getById($id);
+            $getRepositoryPost = new PostRepository();
+            $post = $getRepositoryPost->getById($id);
 
             $postid = $post->getUserId();
             var_dump($_SESSION['user_id']);
