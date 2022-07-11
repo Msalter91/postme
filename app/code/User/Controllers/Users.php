@@ -1,9 +1,8 @@
 <?php
 
-class Users extends Controller
+declare(strict_types=1);
 
-// TODO Remove the dynamically declared properties
-// TODO Property and return types
+class Users extends Controller
 
 {
 
@@ -16,7 +15,6 @@ class Users extends Controller
     public function createUserSession($user){
         //TODO Writing strings (poss 255 chars) to three session variables will be slow! Can this be replaced with a Bool?
         $_SESSION['user_id'] = $user->id;
-        $_SESSION['user_email'] = $user->email;
         $_SESSION['user_name'] = $user->name;
         //TODO Nothing to prevent session fixation attacks here!
         redirect('pages/index/index');

@@ -7,7 +7,7 @@
 
 // TODO Turn this into an abstract - currently no instances of this
 
-class Controller {
+abstract class Controller {
     // Load model
 
     public function model ($model){
@@ -22,7 +22,7 @@ class Controller {
 
     //Load View
 
-    public function view ($view, $data = []){
+    public function view ($view, $data, $errors = []){
         // Check if view exists
         if(file_exists('../app/views/' . $view . '.php')){
             require_once '../app/views/' . $view . '.php';

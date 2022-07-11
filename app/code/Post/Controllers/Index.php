@@ -29,7 +29,7 @@ class Index extends Controller
             $post->setTitle(trim($_POST['title']));
             $post->setBody(trim($_POST['body']));
             $post->setUserId($_SESSION['user_id']);
-            $data = [
+            $errors = [
                 'title_error' => '',
                 'body_error' => ''
             ];
@@ -37,18 +37,18 @@ class Index extends Controller
             //validate the title
 
             if(empty($_POST['title'])){
-                $data['title_error'] = 'Please enter a title';
+                $errors['title_error'] = 'Please enter a title';
             }
 
             if(empty($_POST['body'])){
-                $data['body_error'] = 'Please enter some text';
+                $errors['body_error'] = 'Please enter some text';
             }
-            $data['body'] = $post->getBody();
-            $data['title'] = $post->getTitle();
+//            $data['body'] = $post->getBody();
+//            $data['title'] = $post->getTitle();
 
             $repositoryPost = new PostRepository();
 
-            if(empty($data['title_error'])  && empty($data['body_error'])){
+            if(empty($errors['title_error'])  && empty($errors['body_error'])){
                 if($repositoryPost->save($post)){
                     flash('post_message', 'Post added');
                     redirect('/post/index/index');
@@ -58,15 +58,14 @@ class Index extends Controller
                 }
 
             } else {
-                $this->view('posts/add', $data);
+                $this->view('posts/add', $post, $errors);
             }
 
         } else {
-            $data = ["title" => '',
-                "body" => ''
-            ];
 
-            $this->view('posts/add', $data);
+            $post = new Post();
+
+            $this->view('posts/add', $post);
         }
     }
 
@@ -84,24 +83,27 @@ class Index extends Controller
 
             $data = [
                 'id' => $id,
-                'title' => trim($_POST['title']),
-                'body' => trim($_POST['body']),
+                'title' => $editedPost->getTitle(),
+                'body' => $editedPost->getBody(),
                 'user_id' => $_SESSION['user_id'],
+            ];
+
+            $errors = [
                 'title_error' => '',
                 'body_error' => ''
             ];
 
             //validate the title
 
-            if(empty($data['title'])){
-                $data['title_error'] = 'Please enter a title';
+            if(empty($editedPost->getTitle())){
+                $errors['title_error'] = 'Please enter a title';
             }
 
-            if(empty($data['body'])){
-                $data['body_error'] = 'Please enter some text';
+            if(empty($editedPost->getBody())){
+                $errors['body_error'] = 'Please enter some text';
             }
 
-            if(empty($data['title_error'])  && empty($data['body_error'])){
+            if(empty($errors['title_error'])  && empty($errors['body_error'])){
 
                 $submissionRepositoryPost = new PostRepository();
 
@@ -114,7 +116,7 @@ class Index extends Controller
                 }
 
             } else {
-                $this->view('posts/edit', $data);
+                $this->view('posts/edit', $editedPost, $errors);
             }
 
         } else {
@@ -131,7 +133,7 @@ class Index extends Controller
                 'id' => $id
             ];
 
-            $this->view('posts/edit', $data);
+            $this->view('posts/edit', $post);
         }
     }
 
@@ -142,15 +144,7 @@ class Index extends Controller
 
         $user = '1';
 
-        $data = ['body' => $result->getBody(),
-                'title' => $result->getTitle(),
-                'id' => $result->getId(),
-            'user' => $user,
-            'created_at' => $result->getCreatedAt(),
-            'user_id' => $result->getUserId()
-        ];
-
-        $this->view('posts/show', $data);
+        $this->view('posts/show', $result);
     }
 
     public function delete($id) {
@@ -167,7 +161,7 @@ class Index extends Controller
                 redirect('post/index/show/'.$id);
             }
 
-            if($RepositoryPost->deleteById($id)){
+            if($getRepositoryPost->deleteById($id)){
                 flash('post_message', 'Post removed successfully');
                 redirect('posts');
             } else {
