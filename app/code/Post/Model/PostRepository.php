@@ -53,12 +53,13 @@ class PostRepository implements PostRepositoryInterface
 
     public function save(Post $post): ?Post
     {
-        if(!$post->getCreatedAt()){
-            $this->db->query('INSERT INTO post (title, body, user_id) 
+
+        if(!$post->getId()){
+            $this->db->query('INSERT INTO posts (title, body, user_id) 
             VALUES (:title, :body, :user_id)');
             $this->db->bind(':user_id', $post->getUserId());
         } else {
-            $this->db->query('UPDATE post SET title = :title, body = :body WHERE id = :id');
+            $this->db->query('UPDATE posts SET title = :title, body = :body WHERE id = :id');
             $this->db->bind(':id', $post->getId());
         }
 
