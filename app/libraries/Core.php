@@ -1,10 +1,13 @@
 <?php
+
 /*
  * App Core Class
  * Creates URL & loads core controller
  * URL FORMAT - /controller/method/params
  */
-class Core {
+
+class Core
+{
 
     // Sets the defaults of the app to be the Index Index page (i.e. home)
 
@@ -13,8 +16,8 @@ class Core {
     protected string $currentControllerDirectory = 'Pages';
     protected $params = [];
 
-    public function __construct(){
-
+    public function __construct()
+    {
         /*
          * At the point of creation - the constructor will call the get URL value
          * It then searches for a file with in the controllers folder that matches.
@@ -30,8 +33,8 @@ class Core {
 
         $url = $this->getUrl();
 
-        if(isset($url[0])) {
-            if(file_exists('../app/code/' . ucwords($url[0]) . '/Controllers/' . $url[1] .  '.php')){
+        if (isset($url[0])) {
+            if (file_exists('../app/code/' . ucwords($url[0]) . '/Controllers/' . $url[1] . '.php')) {
                 // If exists, set as controller
 
                 //Set the directory from URL[0]
@@ -41,21 +44,21 @@ class Core {
             }
         }
 
-        if(isset($url[1])){
+        if (isset($url[1])) {
             $this->currentController = ucwords($url[1]);
             unset($url[1]);
         }
 
         // Require the controller
-        require_once '../app/code/' . $this->currentControllerDirectory . '/Controllers/' . $this->currentController .  '.php';
+        require_once '../app/code/' . $this->currentControllerDirectory . '/Controllers/' . $this->currentController . '.php';
 
         // Instantiate controller class
         $this->currentController = new $this->currentController;
 
         // Check for second part of url
-        if(isset($url[2])){
+        if (isset($url[2])) {
             // Check to see if method exists in controller
-            if(method_exists($this->currentController, $url[2])){
+            if (method_exists($this->currentController, $url[2])) {
                 $this->currentMethod = $url[2];
                 // Unset 1 index
                 unset($url[2]);
@@ -69,14 +72,14 @@ class Core {
         call_user_func_array([$this->currentController, $this->currentMethod], $this->params);
     }
 
-    public function getUrl(){
-
+    public function getUrl()
+    {
         /*
          * Pulls the url down and trims any trailing slashed
          * Then returns an array split at '/' which will become our model and view
          */
 
-        if(isset($_GET['url'])){
+        if (isset($_GET['url'])) {
             $url = rtrim($_GET['url'], '/');
             $url = filter_var($url, FILTER_SANITIZE_URL);
             return explode('/', $url);

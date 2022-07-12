@@ -13,7 +13,7 @@
 <?php
 if($data->getUserId() == $_SESSION['user_id']) : ?>
 <hr>
-    <a href="<?= URLROOT?>/post/index/edit/<?=$data->getId()?>" class="btn btn-dark">Edit</a>
+    <a href="<?= URLROOT?>/post/index/edit/<?= $data->getId()?>" class="btn btn-dark">Edit</a>
 <form class="float-end" action="<?=URLROOT?>/post/index/delete/<?=$data->getId()?>" method="post">
     <input type="submit" value="delete" class="btn btn-danger">
 </form>

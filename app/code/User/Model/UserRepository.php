@@ -6,6 +6,7 @@ class UserRepository implements UserRepositoryInterface
 {
 
     protected ?Database $db = null;
+
     public function __construct()
     {
         $this->db = new Database();

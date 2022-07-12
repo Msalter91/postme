@@ -1,6 +1,7 @@
 <?php
 
-class User implements UserInterface {
+class User implements UserInterface
+{
     private ?Database $db = null;
     private array $data = [];
 
@@ -9,49 +10,53 @@ class User implements UserInterface {
         $this->db = new Database;
     }
 
-    public function register($data) {
+    public function register($data)
+    {
         $this->db->query('INSERT INTO users (name, email, password) VALUES (:name, :email, :password)');
 
         $this->db->bind(':name', $data['name']);
         $this->db->bind(':email', $data['email']);
         $this->db->bind(':password', $data['password']);
 
-        if($this->db->execute()){
+        if ($this->db->execute()) {
             return true;
         } else {
             return false;
         }
     }
 
-    public function login($email, $password) {
+    public function login($email, $password)
+    {
         $this->db->query('SELECT * FROM users WHERE email = :email');
         $this->db->bind('email', $email);
 
         $row = $this->db->singleResult();
         $hashed_password = $row->password;
 
-        if(password_verify($password, $hashed_password)){
+        if (password_verify($password, $hashed_password)) {
             return $row;
         } else {
-            return False;
+            return false;
         }
     }
 
 
-    public function findUserByEmail($email) {
+    public function findUserByEmail($email)
+    {
         $this->db->query('SELECT * FROM users WHERE email = :email');
         $this->db->bind(':email', $email);
 
         $row = $this->db->singleResult();
 
-        if($this->db->rowCount() > 0) {
-            return True;
+        if ($this->db->rowCount() > 0) {
+            return true;
         } else {
-            return False;
+            return false;
         }
     }
 
-    public function getUserById($id) {
+    public function getUserById($id)
+    {
         $this->db->query('SELECT * FROM users WHERE id = :id');
         $this->db->bind(':id', $id);
 
@@ -62,7 +67,7 @@ class User implements UserInterface {
 
     public function getId(): int
     {
-        return (int) $this->__get(self::ID);
+        return (int)$this->__get(self::ID);
     }
 
     public function setId(int $id)
@@ -110,11 +115,13 @@ class User implements UserInterface {
         // TODO: Implement setCreatedAt() method.
     }
 
-    public function __set($name, $value) {
+    public function __set($name, $value)
+    {
         $this->data[$name] = $value;
     }
 
-    public function __get($name) {
+    public function __get($name)
+    {
         if (!array_key_exists($name, $this->data)) {
             return null;
         }

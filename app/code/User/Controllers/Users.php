@@ -12,7 +12,9 @@ class Users extends Controller
     {
         $this->userModel = $this->model('User');
     }
-    public function createUserSession($user){
+
+    public function createUserSession($user)
+    {
         //TODO Writing strings (poss 255 chars) to three session variables will be slow! Can this be replaced with a Bool?
         $_SESSION['user_id'] = $user->id;
         $_SESSION['user_name'] = $user->name;
@@ -20,14 +22,13 @@ class Users extends Controller
         redirect('pages/index/index');
     }
 
-    public function register(){
-
+    public function register()
+    {
         //Check for post
-        if($_SERVER['REQUEST_METHOD'] == 'POST'){
-
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $userToCreate = new User();
 
-            $data=[
+            $data = [
                 'name' => (trim($_POST['name'])),
                 'email' => (trim($_POST['email'])),
                 'password' => (trim($_POST['password'])),
@@ -39,52 +40,49 @@ class Users extends Controller
             ];
 
             //Validate Fields
-            if(empty($data['email'])){
+            if (empty($data['email'])) {
                 $data['email_error'] = "Please enter an email";
             } else {
-                if($this->userModel->findUserByEmail($data['email'])) {
+                if ($this->userModel->findUserByEmail($data['email'])) {
                     $data['email_error'] = "Email already in use";
                 }
             }
-            if(empty($data['name'])){
+            if (empty($data['name'])) {
                 $data['name_error'] = "Please enter a name";
             }
-            if(empty($data['password'])){
+            if (empty($data['password'])) {
                 $data['password_error'] = "Please enter a password";
-            } elseif (strlen($data['password']) < 6 ) {
+            } elseif (strlen($data['password']) < 6) {
                 $data['password_error'] = "Password much be at least 6 characters";
             }
-            if($data['password'] !== $data['confirm_password']) {
+            if ($data['password'] !== $data['confirm_password']) {
                 $data['confirm_password_error'] = 'Passwords do not match';
             }
 
-            if(empty($data['email_error']) && empty($data['password_error']) && empty($data['name_error']) && empty($data['confirm_password_error'])) {
-
+            if (empty($data['email_error']) && empty($data['password_error']) && empty($data['name_error']) && empty($data['confirm_password_error'])) {
                 //Hash the password
 
                 $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
 
                 // Register the user using the Model
 
-                if($this->userModel->register($data)){
+                if ($this->userModel->register($data)) {
                     flash('register_success', 'You are now registered');
                     redirect('user/users/login');
                 } else {
                     die('Something has gone wrong');
                 }
-
             } else {
                 // Reloads the view with errors
                 $this->view('users/register', $data);
             }
-
         } else {
             // Load the form
             // Initialise the data
 
             $user = new User();
 
-            $errors=[
+            $errors = [
                 'name_error' => '',
                 'email_error' => '',
                 'password_error' => '',
@@ -94,13 +92,13 @@ class Users extends Controller
         }
     }
 
-    public function login(){
-
+    public function login()
+    {
         //Check for post
-        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Process the form
 
-            $data=[
+            $data = [
                 'email' => trim($_POST['email']),
                 'password' => trim($_POST['password']),
                 'email_error' => '',
@@ -108,19 +106,19 @@ class Users extends Controller
             ];
 
             //Validate Fields
-            if(empty($data['email'])){
+            if (empty($data['email'])) {
                 $data['email_error'] = "Please enter an email";
             }
-            if(empty($data['password'])){
+            if (empty($data['password'])) {
                 $data['password_error'] = "Please enter a password";
-            } elseif (strlen($data['password']) < 6 ) {
+            } elseif (strlen($data['password']) < 6) {
                 $data['password_error'] = "Password much be at least 6 characters";
             }
 
-            if($this->userModel->findUserByEmail($data['email'])){
+            if ($this->userModel->findUserByEmail($data['email'])) {
                 $loggedInUser = $this->userModel->login($data['email'], $data['password']);
 
-                if($loggedInUser){
+                if ($loggedInUser) {
                     //Create session
                     $this->createUserSession($loggedInUser);
                 } else {
@@ -133,13 +131,13 @@ class Users extends Controller
                 $data['email_error'] = 'No user Found';
             }
 
-            if(!empty($data['email_error']) || !empty($data['password_error'])) {
+            if (!empty($data['email_error']) || !empty($data['password_error'])) {
                 $this->view('users/login', $data);
             }
         } else {
             // Load the form
             // Initialise the data
-            $data=[
+            $data = [
                 'email' => '',
                 'password' => '',
                 'email_error' => '',
@@ -149,7 +147,8 @@ class Users extends Controller
         }
     }
 
-    public function logout() {
+    public function logout()
+    {
         //TODO If these aren't used specifically - replace with simple Boolean
         unset($_SERVER['user_id']);
         unset($_SERVER['user_name']);

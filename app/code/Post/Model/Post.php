@@ -9,7 +9,7 @@ class Post implements PostInterface
 
     public function getId(): int
     {
-        return (int) $this->__get(self::ID);
+        return (int)$this->__get(self::ID);
     }
 
     public function setId(int $id)
@@ -19,7 +19,7 @@ class Post implements PostInterface
 
     public function getUserId(): int
     {
-        return (int) $this->__get(self::USERID);
+        return (int)$this->__get(self::USERID);
     }
 
     public function setUserId(int $userId)
@@ -29,7 +29,7 @@ class Post implements PostInterface
 
     public function getTitle(): string
     {
-        return (string) $this->__get(self::TITLE);
+        return (string)$this->__get(self::TITLE);
     }
 
     public function setTitle(string $title)
@@ -39,7 +39,7 @@ class Post implements PostInterface
 
     public function getBody(): string
     {
-        return (string) $this->__get(self::BODY);
+        return (string)$this->__get(self::BODY);
     }
 
     public function setBody(string $body)
@@ -49,7 +49,7 @@ class Post implements PostInterface
 
     public function getCreatedAt(): string
     {
-        return (string) $this->__get(self::CREATEDAT);
+        return (string)$this->__get(self::CREATEDAT);
     }
 
     public function setCreatedAt(string $datetime)

@@ -1,15 +1,15 @@
 <?php
 
 
-
 class Index extends Controller
 {
 
     protected ?object $postModel = null;
 
-    public function index(){
+    public function index()
+    {
         $repositoryPost = new PostRepository();
-        try{
+        try {
             $results = $repositoryPost->getList();
         } catch (Exception $e) {
             flash('post_message', $e->getMessage(), 'alert alert-danger');
@@ -21,13 +21,11 @@ class Index extends Controller
         ];
 
         $this->view('posts/index', $data);
-
     }
 
-    public function add() {
-
-        if($_SERVER['REQUEST_METHOD'] == 'POST') {
-
+    public function add()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             //sanitize
             $post = new Post;
 
@@ -41,41 +39,37 @@ class Index extends Controller
 
             //validate the title
 
-            if(empty($_POST['title'])){
+            if (empty($_POST['title'])) {
                 $errors['title_error'] = 'Please enter a title';
             }
 
-            if(empty($_POST['body'])){
+            if (empty($_POST['body'])) {
                 $errors['body_error'] = 'Please enter some text';
             }
 
             $repositoryPost = new PostRepository();
 
-            if(empty($errors['title_error'])  && empty($errors['body_error'])){
-                try{
+            if (empty($errors['title_error']) && empty($errors['body_error'])) {
+                try {
                     $repositoryPost->save($post);
                     redirect('/posts/index/index');
-                } catch(Exception $e) {
+                } catch (Exception $e) {
                     flash('post_message', $e->getMessage(), 'alert alert-danger');
                     redirect('/posts/index/index');
                 }
-
             } else {
                 $this->view('posts/add', $post, $errors);
             }
-
         } else {
-
             $post = new Post();
 
             $this->view('posts/add', $post);
         }
     }
 
-    public function edit($id) {
-
-        if($_SERVER['REQUEST_METHOD'] == 'POST') {
-
+    public function edit($id)
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $editedPost = new Post();
 
             $editedPost->setTitle(trim($_POST['title']));
@@ -90,37 +84,34 @@ class Index extends Controller
 
             //validate the title
 
-            if(empty($editedPost->getTitle())){
+            if (empty($editedPost->getTitle())) {
                 $errors['title_error'] = 'Please enter a title';
             }
 
-            if(empty($editedPost->getBody())){
+            if (empty($editedPost->getBody())) {
                 $errors['body_error'] = 'Please enter some text';
             }
 
-            if(empty($errors['title_error'])  && empty($errors['body_error'])){
-
+            if (empty($errors['title_error']) && empty($errors['body_error'])) {
                 $submissionRepositoryPost = new PostRepository();
 
-                try{
+                try {
                     $submissionRepositoryPost->save($editedPost);
                     redirect('/posts/index/index');
-                } catch(Exception $e) {
+                } catch (Exception $e) {
                     flash('post_message', $e->getMessage(), 'alert alert-danger');
                     redirect('/posts/index/index');
                 }
-
             } else {
                 $this->view('posts/edit', $editedPost, $errors);
             }
-
         } else {
             //Get existing post form model
             $respositoryPost = new PostRepository();
             $post = $respositoryPost->getById($id);
 
             //Check ownership
-            if($post->getUserId()!= $_SESSION['user_id']){
+            if ($post->getUserId() != $_SESSION['user_id']) {
                 redirect('posts/index/index');
             }
 
@@ -128,44 +119,39 @@ class Index extends Controller
         }
     }
 
-    public function show($id) {
-
+    public function show($id)
+    {
         $RepositoryPost = new PostRepository();
         try {
             $result = $RepositoryPost->getById($id);
             $this->view('posts/show', $result);
-        } catch (Exception $e){
+        } catch (Exception $e) {
             flash('post_message', $e->getMessage(), 'alert alert-danger');
             redirect('pages/index/index');
         }
     }
 
-    public function delete($id) {
-
-        if($_SERVER['REQUEST_METHOD'] == 'POST'){
-
+    public function delete($id)
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $getRepositoryPost = new PostRepository();
             $post = $getRepositoryPost->getById($id);
 
             $postid = $post->getUserId();
             var_dump($_SESSION['user_id']);
 
-            if($postid != $_SESSION['user_id']){
-                redirect('post/index/show/'.$id);
+            if ($postid != $_SESSION['user_id']) {
+                redirect('post/index/show/' . $id);
             }
 
-            if($getRepositoryPost->deleteById($id)){
+            if ($getRepositoryPost->deleteById($id)) {
                 flash('post_message', 'Post removed successfully');
                 redirect('posts');
             } else {
                 die('Something has gone wrong');
             }
-
-        }
-
-        else
-        {
-            redirect('post/index/show/'.$id);
+        } else {
+            redirect('post/index/show/' . $id);
         }
     }
 }

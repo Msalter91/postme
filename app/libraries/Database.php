@@ -6,7 +6,8 @@
  * Return rows and results
  */
 
-class Database {
+class Database
+{
     private string $host = DB_HOST;
     private string $user = DB_USER;
     private string $pass = DB_PASS;
@@ -21,25 +22,29 @@ class Database {
         // set DNS
         $dsn = 'mysql:host=' . $this->host . ";dbname=" . $this->dbname;
         $options = array(
-            PDO::ATTR_PERSISTENT => TRUE,
+            PDO::ATTR_PERSISTENT => true,
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
         );
         // Create a PDO instance
 
-        try{
+        try {
             $this->dbh = new PDO($dsn, $this->user, $this->pass, $options);
-        } catch(PDOException $e){
+        } catch (PDOException $e) {
             $this->error = $e->getMessage();
         }
     }
+
     //Prepare the statement from a query
-    public function query($sql){
+    public function query($sql)
+    {
         $this->stmt = $this->dbh->prepare($sql);
     }
+
     // bind values
-    public function bind($param, $value, $type = null){
-        if(is_null($type)){
-            switch(true){
+    public function bind($param, $value, $type = null)
+    {
+        if (is_null($type)) {
+            switch (true) {
                 case is_int($value):
                     $type = PDO::PARAM_INT;
                     break;
@@ -53,26 +58,31 @@ class Database {
                     $type = PDO::PARAM_STR;
             }
         }
-        $this->stmt->bindValue($param,$value,$type);
+        $this->stmt->bindValue($param, $value, $type);
     }
+
     //Execute the prepared stmt
-    public function execute(){
+    public function execute()
+    {
         return $this->stmt->execute();
     }
 
     //Get result set as array of objects
-    public function resultSet(){
+    public function resultSet()
+    {
         $this->execute();
         return $this->stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
-    public function singleResult(){
+    public function singleResult()
+    {
         $this->execute();
         return $this->stmt->fetch(PDO::FETCH_OBJ);
     }
 
     //Get row count
-    public function rowCount(){
+    public function rowCount()
+    {
         return $this->stmt->rowCount();
     }
 }

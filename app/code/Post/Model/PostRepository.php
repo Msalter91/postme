@@ -8,6 +8,7 @@ require_once 'Post.php';
 class PostRepository implements PostRepositoryInterface
 {
     protected ?Database $db = null;
+
     public function __construct()
     {
         $this->db = new Database();
@@ -20,21 +21,21 @@ class PostRepository implements PostRepositoryInterface
 
         $this->db->bind(':id', $id);
 
-            $result = $this->db->singleResult();
+        $result = $this->db->singleResult();
 
-            if(!$result){
-                throw new Exception("Post not found");
-            }
+        if (!$result) {
+            throw new Exception("Post not found");
+        }
 
-            $post = new Post();
+        $post = new Post();
 
-            $post->setId($result->id);
-            $post->setBody($result->body);
-            $post->setTitle($result->title);
-            $post->setUserId($result->user_id);
-            $post->setCreatedAt($result->created_at);
+        $post->setId($result->id);
+        $post->setBody($result->body);
+        $post->setTitle($result->title);
+        $post->setUserId($result->user_id);
+        $post->setCreatedAt($result->created_at);
 
-            return $post;
+        return $post;
     }
 
     public function deleteById(int $id): bool
@@ -43,20 +44,20 @@ class PostRepository implements PostRepositoryInterface
 
         $this->db->bind(':id', $id);
 
-        if($this->db->execute()) {
+        if ($this->db->execute()) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
 
     public function save(Post $post): ?Post
     {
-
-        if(!$post->getId()){
-            $this->db->query('INSERT INTO posts (title, body, user_id) 
-            VALUES (:title, :body, :user_id)');
+        if (!$post->getId()) {
+            $this->db->query(
+                'INSERT INTO posts (title, body, user_id) 
+            VALUES (:title, :body, :user_id)'
+            );
             $this->db->bind(':user_id', $post->getUserId());
         } else {
             $this->db->query('UPDATE posts SET title = :title, body = :body WHERE id = :id');
@@ -69,14 +70,15 @@ class PostRepository implements PostRepositoryInterface
         try {
             $this->db->execute();
             return $post;
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             throw new Exception("Unable to upload post due to database problem");
         }
     }
 
     public function getList()
     {
-        $this->db->query('SELECT *,
+        $this->db->query(
+            'SELECT *,
                                posts.id as postId,
                                users.id as userId,
                                posts.created_at as postsCreated,
@@ -84,14 +86,13 @@ class PostRepository implements PostRepositoryInterface
                                FROM Posts
                                INNER JOIN users
                                ON posts.user_id = users.id
-                               ORDER BY posts.created_at DESC');
+                               ORDER BY posts.created_at DESC'
+        );
 
         try {
             return $this->db->resultSet();
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             throw new Exception("There has been a problem connecting to the Database.");
         }
-
-
     }
 }

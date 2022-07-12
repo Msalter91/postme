@@ -7,13 +7,15 @@
 
 // TODO Turn this into an abstract - currently no instances of this
 
-abstract class Controller {
+abstract class Controller
+{
     // Load model
 
-    public function model ($model){
+    public function model($model)
+    {
         //require the model that we want
 //        require_once '../app/models/' . $model . '.php';
-        require_once '../app/code/' . ucwords($model) .'/Model/' . $model . '.php';
+        require_once '../app/code/' . ucwords($model) . '/Model/' . $model . '.php';
 
         // Create a new instance of that model
 
@@ -22,9 +24,10 @@ abstract class Controller {
 
     //Load View
 
-    public function view ($view, $data, $errors = []){
+    public function view($view, $data, $errors = [])
+    {
         // Check if view exists
-        if(file_exists('../app/views/' . $view . '.php')){
+        if (file_exists('../app/views/' . $view . '.php')) {
             require_once '../app/views/' . $view . '.php';
         } else {
             //If view does not exist
