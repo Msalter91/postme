@@ -8,10 +8,10 @@ class Users extends Controller
 {
     protected ?object $userModel = null;
 
-//    public function __construct()
-//    {
-//        $this->userModel = $this->model('User');
-//    }
+    public function __construct()
+    {
+        $this->userModel = $this->model('User');
+    }
     public function createUserSession($user){
         //TODO Writing strings (poss 255 chars) to three session variables will be slow! Can this be replaced with a Bool?
         $_SESSION['user_id'] = $user->id;
@@ -28,7 +28,7 @@ class Users extends Controller
             $userToCreate = new User();
 
             $data=[
-                'name' = (trim($_POST['name'])),
+                'name' => (trim($_POST['name'])),
                 'email' => (trim($_POST['email'])),
                 'password' => (trim($_POST['password'])),
                 'confirm_password' => (trim($_POST['confirm_password'])),
