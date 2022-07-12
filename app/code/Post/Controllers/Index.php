@@ -1,11 +1,13 @@
 <?php
 
-declare(strict_types=1);
+
 
 class Index extends Controller
 {
-    public function index() :void
-    {
+
+    protected ?object $postModel = null;
+
+    public function index(){
         $repositoryPost = new PostRepository();
         try{
             $results = $repositoryPost->getList();
@@ -22,8 +24,7 @@ class Index extends Controller
 
     }
 
-    public function add() :void
-    {
+    public function add() {
 
         if($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -71,8 +72,7 @@ class Index extends Controller
         }
     }
 
-    public function edit(int $id) :void
-    {
+    public function edit($id) {
 
         if($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -115,16 +115,11 @@ class Index extends Controller
             }
 
         } else {
-
+            //Get existing post form model
             $respositoryPost = new PostRepository();
+            $post = $respositoryPost->getById($id);
 
-            try{
-                $post = $respositoryPost->getById($id);
-            } catch(Exception $e) {
-                flash('post_message', $e->getMessage(), 'alert alert-danger');
-                redirect('/posts/index/index');
-            }
-
+            //Check ownership
             if($post->getUserId()!= $_SESSION['user_id']){
                 redirect('posts/index/index');
             }
@@ -133,8 +128,7 @@ class Index extends Controller
         }
     }
 
-    public function show(int $id) :void
-    {
+    public function show($id) {
 
         $RepositoryPost = new PostRepository();
         try {
@@ -146,42 +140,27 @@ class Index extends Controller
         }
     }
 
-    public function delete(int $id) :void
-    {
+    public function delete($id) {
 
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
             $getRepositoryPost = new PostRepository();
+            $post = $getRepositoryPost->getById($id);
 
-            try{
-                $post = $getRepositoryPost->getById($id);
-            } catch(Exception $e) {
-                flash('post_message', $e->getMessage(), 'alert alert-danger');
-                redirect('pages/index/index');
-            }
-
-
-
-            try{
-                $postid = $post->getUserId();
-            } catch(Exception $e){
-                flash('post_message', $e->getMessage(), 'alert alert-danger');
-                redirect('pages/index/index');
-            }
+            $postid = $post->getUserId();
+            var_dump($_SESSION['user_id']);
 
             if($postid != $_SESSION['user_id']){
                 redirect('post/index/show/'.$id);
             }
 
-
-            try{
-                ($getRepositoryPost->deleteById($id));
+            if($getRepositoryPost->deleteById($id)){
                 flash('post_message', 'Post removed successfully');
                 redirect('posts');
-            } catch(Exception $e){
-                flash('post_message', $e->getMessage(), 'alert alert-danger');
-                redirect('pages/index/index');
+            } else {
+                die('Something has gone wrong');
             }
+
         }
 
         else
