@@ -1,11 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 class Index extends Controller
 {
-    public function __construct()
-    {
-    }
-
     public function index()
     {
         if (isLoggedIn()) {
@@ -22,7 +20,6 @@ class Index extends Controller
 
     public function about()
     {
-        // Added default argument here to prevent error from an incorrect url
         $data = [
             'title' => 'About',
             'description' => 'An app to share your posts'

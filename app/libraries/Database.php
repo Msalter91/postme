@@ -1,4 +1,5 @@
 <?php
+
 /*
  * PDO Database class
  * Connect to DB

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 class Post implements PostInterface
 {
-
     private array $data = [];
 
     public function getId(): int

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 require_once 'Post.php';
 
-
 class PostRepository implements PostRepositoryInterface
 {
     protected ?Database $db = null;
@@ -14,6 +13,9 @@ class PostRepository implements PostRepositoryInterface
         $this->db = new Database();
     }
 
+    /**
+     * @throws Exception
+     */
     public function getById(int $id): Post
     {
         $this->db->query('SELECT * FROM posts WHERE id = :id');

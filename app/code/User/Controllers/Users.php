@@ -15,7 +15,6 @@ class Users extends Controller
 
     public function createUserSession($user)
     {
-        //TODO Writing strings (poss 255 chars) to three session variables will be slow! Can this be replaced with a Bool?
         $_SESSION['user_id'] = $user->id;
         $_SESSION['user_name'] = $user->name;
         //TODO Nothing to prevent session fixation attacks here!
@@ -59,12 +58,11 @@ class Users extends Controller
                 $data['confirm_password_error'] = 'Passwords do not match';
             }
 
-            if (empty($data['email_error']) && empty($data['password_error']) && empty($data['name_error']) && empty($data['confirm_password_error'])) {
-                //Hash the password
-
+            if (
+                empty($data['email_error']) && empty($data['password_error']) &&
+                empty($data['name_error']) && empty($data['confirm_password_error'])
+            ) {
                 $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
-
-                // Register the user using the Model
 
                 if ($this->userModel->register($data)) {
                     flash('register_success', 'You are now registered');
@@ -77,44 +75,28 @@ class Users extends Controller
                 $this->view('users/register', $data);
             }
         } else {
-            // Load the form
-            // Initialise the data
-
             $user = new User();
-
-            $errors = [
-                'name_error' => '',
-                'email_error' => '',
-                'password_error' => '',
-                'confirm_password_error' => ''
-            ];
             $this->view('users/register', $user);
         }
     }
 
     public function login()
     {
-        //Check for post
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Process the form
-
             $data = [
                 'email' => trim($_POST['email']),
                 'password' => trim($_POST['password']),
                 'email_error' => '',
                 'password_error' => '',
             ];
-
-            //Validate Fields
             if (empty($data['email'])) {
-                $data['email_error'] = "Please enter an email";
+                $data['email_error'] = 'Please enter an email';
             }
             if (empty($data['password'])) {
-                $data['password_error'] = "Please enter a password";
+                $data['password_error'] = 'Please enter a password';
             } elseif (strlen($data['password']) < 6) {
-                $data['password_error'] = "Password much be at least 6 characters";
+                $data['password_error'] = 'Password much be at least 6 characters';
             }
-
             if ($this->userModel->findUserByEmail($data['email'])) {
                 $loggedInUser = $this->userModel->login($data['email'], $data['password']);
 
@@ -156,5 +138,4 @@ class Users extends Controller
         session_destroy();
         redirect('/User/Users/login');
     }
-
 }

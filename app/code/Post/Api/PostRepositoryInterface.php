@@ -12,6 +12,3 @@ interface PostRepositoryInterface
 
     public function getList();
 }
-
-
-

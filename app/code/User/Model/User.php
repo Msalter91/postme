@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class User implements UserInterface
 {
     private ?Database $db = null;
@@ -7,10 +9,10 @@ class User implements UserInterface
 
     public function __construct()
     {
-        $this->db = new Database;
+        $this->db = new Database();
     }
 
-    public function register($data)
+    public function register($data): bool
     {
         $this->db->query('INSERT INTO users (name, email, password) VALUES (:name, :email, :password)');
 
@@ -25,7 +27,7 @@ class User implements UserInterface
         }
     }
 
-    public function login($email, $password)
+    public function login($email, $password): bool | object
     {
         $this->db->query('SELECT * FROM users WHERE email = :email');
         $this->db->bind('email', $email);
@@ -41,7 +43,7 @@ class User implements UserInterface
     }
 
 
-    public function findUserByEmail($email)
+    public function findUserByEmail($email): bool
     {
         $this->db->query('SELECT * FROM users WHERE email = :email');
         $this->db->bind(':email', $email);
@@ -55,14 +57,12 @@ class User implements UserInterface
         }
     }
 
-    public function getUserById($id)
+    public function getUserById($id): bool | object
     {
         $this->db->query('SELECT * FROM users WHERE id = :id');
         $this->db->bind(':id', $id);
 
-        $row = $this->db->singleResult();
-
-        return $row;
+        return $this->db->singleResult();
     }
 
     public function getId(): int

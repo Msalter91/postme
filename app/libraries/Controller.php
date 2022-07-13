@@ -1,11 +1,6 @@
 <?php
 
-/*
- * Base Controller
- * This loads the models and views
- */
-
-// TODO Turn this into an abstract - currently no instances of this
+declare(strict_types=1);
 
 abstract class Controller
 {

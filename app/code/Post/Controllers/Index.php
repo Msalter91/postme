@@ -1,9 +1,9 @@
 <?php
 
+declare(strict_types=1);
 
 class Index extends Controller
 {
-
     protected ?object $postModel = null;
 
     public function index()
@@ -25,10 +25,8 @@ class Index extends Controller
 
     public function add()
     {
+        $post = new Post();
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            //sanitize
-            $post = new Post;
-
             $post->setTitle(trim($_POST['title']));
             $post->setBody(trim($_POST['body']));
             $post->setUserId($_SESSION['user_id']);
@@ -36,8 +34,6 @@ class Index extends Controller
                 'title_error' => '',
                 'body_error' => ''
             ];
-
-            //validate the title
 
             if (empty($_POST['title'])) {
                 $errors['title_error'] = 'Please enter a title';
@@ -61,12 +57,13 @@ class Index extends Controller
                 $this->view('posts/add', $post, $errors);
             }
         } else {
-            $post = new Post();
-
             $this->view('posts/add', $post);
         }
     }
 
+    /**
+     * @throws Exception
+     */
     public function edit($id)
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -74,15 +71,13 @@ class Index extends Controller
 
             $editedPost->setTitle(trim($_POST['title']));
             $editedPost->setBody(trim($_POST['body']));
-            $editedPost->setId($id);
+            $editedPost->setId(intval($id));
             $editedPost->setUserId($_SESSION['user_id']);
 
             $errors = [
                 'title_error' => '',
                 'body_error' => ''
             ];
-
-            //validate the title
 
             if (empty($editedPost->getTitle())) {
                 $errors['title_error'] = 'Please enter a title';
@@ -106,11 +101,9 @@ class Index extends Controller
                 $this->view('posts/edit', $editedPost, $errors);
             }
         } else {
-            //Get existing post form model
             $respositoryPost = new PostRepository();
-            $post = $respositoryPost->getById($id);
+            $post = $respositoryPost->getById(intval($id));
 
-            //Check ownership
             if ($post->getUserId() != $_SESSION['user_id']) {
                 redirect('posts/index/index');
             }
@@ -123,7 +116,7 @@ class Index extends Controller
     {
         $RepositoryPost = new PostRepository();
         try {
-            $result = $RepositoryPost->getById($id);
+            $result = $RepositoryPost->getById(intval($id));
             $this->view('posts/show', $result);
         } catch (Exception $e) {
             flash('post_message', $e->getMessage(), 'alert alert-danger');
@@ -131,11 +124,14 @@ class Index extends Controller
         }
     }
 
+    /**
+     * @throws Exception
+     */
     public function delete($id)
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $getRepositoryPost = new PostRepository();
-            $post = $getRepositoryPost->getById($id);
+            $post = $getRepositoryPost->getById(intval($id));
 
             $postid = $post->getUserId();
             var_dump($_SESSION['user_id']);
@@ -144,7 +140,7 @@ class Index extends Controller
                 redirect('post/index/show/' . $id);
             }
 
-            if ($getRepositoryPost->deleteById($id)) {
+            if ($getRepositoryPost->deleteById(intval($id))) {
                 flash('post_message', 'Post removed successfully');
                 redirect('posts');
             } else {
