@@ -11,57 +11,98 @@ class Post implements PostInterface
         return (int)$this->__get(self::ID);
     }
 
-    public function setId(int $id)
+    /**
+     * @param int $id
+     * @return void
+     */
+    public function setId(int $id): void
     {
         $this->__set(self::ID, $id);
     }
 
+    /**
+     * @return int
+     */
     public function getUserId(): int
     {
         return (int)$this->__get(self::USERID);
     }
 
-    public function setUserId(int $userId)
+    /**
+     * @param int $userId
+     * @return void
+     */
+    public function setUserId(int $userId): void
     {
         $this->__set(self::USERID, $userId);
     }
 
+    /**
+     * @return string
+     */
     public function getTitle(): string
     {
         return (string)$this->__get(self::TITLE);
     }
 
-    public function setTitle(string $title)
+    /**
+     * @param string $title
+     * @return void
+     */
+    public function setTitle(string $title): void
     {
         $this->__set(self::TITLE, $title);
     }
 
+    /**
+     * @return string
+     */
     public function getBody(): string
     {
         return (string)$this->__get(self::BODY);
     }
 
-    public function setBody(string $body)
+    /**
+     * @param string $body
+     * @return void
+     */
+    public function setBody(string $body): void
     {
         $this->__set(self::BODY, $body);
     }
 
+    /**
+     * @return string
+     */
     public function getCreatedAt(): string
     {
         return (string)$this->__get(self::CREATEDAT);
     }
 
-    public function setCreatedAt(string $datetime)
+    /**
+     * @param string $datetime
+     * @return void
+     */
+    public function setCreatedAt(string $datetime): void
     {
         $this->__set(self::CREATEDAT, $datetime);
     }
 
-    public function __set($name, $value)
+    /**
+     * @param $name
+     * @param $value
+     * @return void
+     */
+    public function __set($name, $value): void
     {
         $this->data[$name] = $value;
     }
 
-    public function __get($name)
+    /**
+     * @param $name
+     * @return mixed|null
+     */
+    public function __get($name): mixed
     {
         if (!array_key_exists($name, $this->data)) {
             return null;

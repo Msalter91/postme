@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace library;
 
 use PDO as PDO;
@@ -14,7 +16,6 @@ class Database
 
     private mixed $dbh;
     private mixed $stmt;
-    private mixed $error;
 
     public function __construct()
     {
@@ -27,15 +28,16 @@ class Database
         try {
             $this->dbh = new PDO($dsn, $this->user, $this->pass, $options);
         } catch (PDOException $e) {
-            $this->error = $e->getMessage();
+            flash('post_message', $e->getMessage(), 'alert alert-danger');
+            redirect('pages/index/index');
         }
     }
-    public function query($sql)
+    public function query($sql): void
     {
         $this->stmt = $this->dbh->prepare($sql);
     }
 
-    public function bind($param, $value, $type = null)
+    public function bind($param, $value, $type = null): void
     {
         if (is_null($type)) {
             $type = match (true) {
@@ -48,27 +50,24 @@ class Database
         $this->stmt->bindValue($param, $value, $type);
     }
 
-    //Execute the prepared stmt
-    public function execute()
+    public function execute(): bool
     {
         return $this->stmt->execute();
     }
 
-    //Get result set as array of objects
-    public function resultSet()
+    public function resultSet(): array | bool
     {
         $this->execute();
         return $this->stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
-    public function singleResult()
+    public function singleResult(): object | bool
     {
         $this->execute();
         return $this->stmt->fetch(PDO::FETCH_OBJ);
     }
 
-    //Get row count
-    public function rowCount()
+    public function rowCount(): int
     {
         return $this->stmt->rowCount();
     }

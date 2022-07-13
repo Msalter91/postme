@@ -2,7 +2,7 @@
 
 session_start();
 
-function isLoggedIn()
+function isLoggedIn(): bool
 {
     if (isset($_SESSION['user_id'])) {
         return true;
@@ -11,7 +11,7 @@ function isLoggedIn()
     }
 }
 
-function flash($flash = '', $message = '', $class = 'alert alert-success')
+function flash($flash = '', $message = '', $class = 'alert alert-success'): void
 {
     if (!empty($flash) and !empty($message) and empty($_SESSION[$flash])) {
         $_SESSION[$flash] = $message;

@@ -13,5 +13,8 @@
     },
   "require": {
     "ext-pdo": "*"
+  },
+  "scripts": {
+    "phpcs": "phpcs --standard=PSR2"
   }
 }

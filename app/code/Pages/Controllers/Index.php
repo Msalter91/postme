@@ -6,7 +6,7 @@ use library\Controller as Controller;
 
 class Index extends Controller
 {
-    public function index()
+    public function index(): void
     {
         if (isLoggedIn()) {
             redirect('post/index/index');
@@ -20,7 +20,7 @@ class Index extends Controller
         $this->view('pages/index', $data);
     }
 
-    public function about()
+    public function about(): void
     {
         $data = [
             'title' => 'About',
@@ -29,7 +29,7 @@ class Index extends Controller
         $this->view('pages/about', $data);
     }
 
-    public function error()
+    public function error(): void
     {
         $data = [];
         $this->view('pages/error', $data);

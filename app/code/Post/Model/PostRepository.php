@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-require_once 'Post.php';
-
 use library\Database as Database;
 
 class PostRepository implements PostRepositoryInterface
@@ -16,12 +14,13 @@ class PostRepository implements PostRepositoryInterface
     }
 
     /**
+     * @param int $id
+     * @return post
      * @throws Exception
      */
     public function getById(int $id): Post
     {
         $this->db->query('SELECT * FROM posts WHERE id = :id');
-
 
         $this->db->bind(':id', $id);
 
@@ -42,6 +41,10 @@ class PostRepository implements PostRepositoryInterface
         return $post;
     }
 
+    /**
+     * @param int $id
+     * @return bool
+     */
     public function deleteById(int $id): bool
     {
         $this->db->query('DELETE FROM posts where id = :id');
@@ -55,6 +58,11 @@ class PostRepository implements PostRepositoryInterface
         }
     }
 
+    /**
+     * @param Post $post
+     * @return Post|null
+     * @throws Exception
+     */
     public function save(Post $post): ?Post
     {
         if (!$post->getId()) {
@@ -79,7 +87,11 @@ class PostRepository implements PostRepositoryInterface
         }
     }
 
-    public function getList()
+    /**
+     * @return array
+     * @throws Exception
+     */
+    public function getList(): array
     {
         $this->db->query(
             'SELECT *,

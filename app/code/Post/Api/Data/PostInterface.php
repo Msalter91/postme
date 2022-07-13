@@ -27,6 +27,4 @@ interface PostInterface
     public function setBody(string $body);
 
     public function getCreatedAt(): string;
-
-    public function setCreatedAt(string $datetime);
 }

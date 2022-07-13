@@ -15,6 +15,7 @@ require '../app/code/User/Api/UserRepositoryInterface.php';
 //Load helpers
 require_once 'helpers/url_helper.php';
 require_once 'helpers/session_helper.php';
+require_once 'helpers/error_helper.php';
 
 // require models
 require '../app/code/Post/Model/Post.php';

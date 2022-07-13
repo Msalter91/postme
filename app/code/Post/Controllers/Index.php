@@ -8,14 +8,14 @@ class Index extends Controller
 {
     protected ?object $postModel = null;
 
-    public function index()
+
+    public function index(): void
     {
         $repositoryPost = new PostRepository();
         try {
             $results = $repositoryPost->getList();
         } catch (Exception $e) {
-            flash('post_message', $e->getMessage(), 'alert alert-danger');
-            redirect('pages/index/error');
+            $this->errorHandler($e, 'pages/index/error');
         }
 
         $data = [
@@ -25,7 +25,10 @@ class Index extends Controller
         $this->view('posts/index', $data);
     }
 
-    public function add()
+    /**
+     * @return void
+     */
+    public function add(): void
     {
         $post = new Post();
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -52,8 +55,7 @@ class Index extends Controller
                     $repositoryPost->save($post);
                     redirect('/posts/index/index');
                 } catch (Exception $e) {
-                    flash('post_message', $e->getMessage(), 'alert alert-danger');
-                    redirect('/posts/index/index');
+                    $this->errorHandler($e, '/posts/index/index');
                 }
             } else {
                 $this->view('posts/add', $post, $errors);
@@ -65,8 +67,9 @@ class Index extends Controller
 
     /**
      * @throws Exception
+     * @returns null
      */
-    public function edit($id)
+    public function edit($id): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $editedPost = new Post();
@@ -96,8 +99,7 @@ class Index extends Controller
                     $submissionRepositoryPost->save($editedPost);
                     redirect('/posts/index/index');
                 } catch (Exception $e) {
-                    flash('post_message', $e->getMessage(), 'alert alert-danger');
-                    redirect('/posts/index/index');
+                    $this->errorHandler($e, '/posts/index/index');
                 }
             } else {
                 $this->view('posts/edit', $editedPost, $errors);
@@ -114,22 +116,22 @@ class Index extends Controller
         }
     }
 
-    public function show($id)
+    public function show($id): void
     {
         $RepositoryPost = new PostRepository();
         try {
             $result = $RepositoryPost->getById(intval($id));
             $this->view('posts/show', $result);
         } catch (Exception $e) {
-            flash('post_message', $e->getMessage(), 'alert alert-danger');
-            redirect('pages/index/index');
+            $this->errorHandler($e, 'pages/index/index');
         }
     }
 
     /**
      * @throws Exception
+     * @returns null
      */
-    public function delete($id)
+    public function delete($id): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $getRepositoryPost = new PostRepository();
@@ -141,12 +143,12 @@ class Index extends Controller
             if ($postid != $_SESSION['user_id']) {
                 redirect('post/index/show/' . $id);
             }
-
-            if ($getRepositoryPost->deleteById(intval($id))) {
+            try {
+                $getRepositoryPost->deleteById(intval($id));
                 flash('post_message', 'Post removed successfully');
                 redirect('posts');
-            } else {
-                die('Something has gone wrong');
+            } catch (Exception $e) {
+                $this->errorHandler($e, 'pages/index/index');
             }
         } else {
             redirect('post/index/show/' . $id);
