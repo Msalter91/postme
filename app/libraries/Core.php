@@ -2,13 +2,7 @@
 
 declare(strict_types=1);
 
-
-
-/*
- * App Core Class
- * Creates URL & loads core controller
- * URL FORMAT - /controller/method/params
- */
+namespace library;
 
 class Core
 {
@@ -38,7 +32,6 @@ class Core
         require_once '../app/code/' . $this->currentControllerDirectory .
             '/Controllers/' . $this->currentController . '.php';
 
-        // Instantiate controller class
         $this->currentController = new $this->currentController();
 
 

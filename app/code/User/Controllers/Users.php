@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use library\Controller as Controller;
 
 class Users extends Controller
 

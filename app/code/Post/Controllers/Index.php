@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use library\Controller as Controller;
+
 class Index extends Controller
 {
     protected ?object $postModel = null;

@@ -1,5 +1,4 @@
 <?php
-//load config
 
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
@@ -27,15 +26,3 @@ require '../app/code/User/Model/UserRepository.php';
 require 'libraries/core.php';
 require 'libraries/controller.php';
 require 'libraries/Database.php';
-
-
-
-
-
-//Autoload core libraries
-//spl_autoload_register(function($classNAme){
-//    require 'libraries/'. $classNAme . '.php';
-//});
-
-
-

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 require_once 'Post.php';
 
+use library\Database as Database;
+
 class PostRepository implements PostRepositoryInterface
 {
     protected ?Database $db = null;
