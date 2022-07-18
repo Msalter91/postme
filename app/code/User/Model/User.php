@@ -12,7 +12,7 @@ class User implements UserInterface
         $this->db = new Database();
     }
 
-    public function register($data): bool
+    public function register(array $data): bool
     {
         $this->db->query('INSERT INTO users (name, email, password) VALUES (:name, :email, :password)');
 
@@ -27,7 +27,7 @@ class User implements UserInterface
         }
     }
 
-    public function login($email, $password): bool | object
+    public function login(string $email, string $password): bool | object
     {
         $this->db->query('SELECT * FROM users WHERE email = :email');
         $this->db->bind('email', $email);
@@ -43,7 +43,7 @@ class User implements UserInterface
     }
 
 
-    public function findUserByEmail($email): bool
+    public function findUserByEmail(string $email): bool
     {
         $this->db->query('SELECT * FROM users WHERE email = :email');
         $this->db->bind(':email', $email);
@@ -57,7 +57,7 @@ class User implements UserInterface
         }
     }
 
-    public function getUserById($id): bool | object
+    public function getUserById(int $id): bool | object
     {
         $this->db->query('SELECT * FROM users WHERE id = :id');
         $this->db->bind(':id', $id);

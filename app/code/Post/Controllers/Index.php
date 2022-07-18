@@ -8,7 +8,6 @@ class Index extends Controller
 {
     protected ?object $postModel = null;
 
-
     public function index(): void
     {
         $repositoryPost = new PostRepository();
@@ -136,9 +135,7 @@ class Index extends Controller
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $getRepositoryPost = new PostRepository();
             $post = $getRepositoryPost->getById(intval($id));
-
             $postid = $post->getUserId();
-            var_dump($_SESSION['user_id']);
 
             if ($postid != $_SESSION['user_id']) {
                 redirect('post/index/show/' . $id);

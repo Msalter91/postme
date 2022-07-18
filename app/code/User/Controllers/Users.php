@@ -14,7 +14,7 @@ class Users extends Controller
         $this->userModel = $this->model('User');
     }
 
-    public function createUserSession($user)
+    public function createUserSession(User $user)
     {
         $_SESSION['user_id'] = $user->id;
         $_SESSION['user_name'] = $user->name;
@@ -22,9 +22,8 @@ class Users extends Controller
         redirect('pages/index/index');
     }
 
-    public function register()
+    public function register(): void
     {
-        //Check for post
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $userToCreate = new User();
 
@@ -39,21 +38,20 @@ class Users extends Controller
                 'confirm_password_error' => ''
             ];
 
-            //Validate Fields
             if (empty($data['email'])) {
-                $data['email_error'] = "Please enter an email";
+                $data['email_error'] = 'Please enter an email';
             } else {
                 if ($this->userModel->findUserByEmail($data['email'])) {
-                    $data['email_error'] = "Email already in use";
+                    $data['email_error'] = 'Email already in use';
                 }
             }
             if (empty($data['name'])) {
-                $data['name_error'] = "Please enter a name";
+                $data['name_error'] = 'Please enter a name';
             }
             if (empty($data['password'])) {
-                $data['password_error'] = "Please enter a password";
+                $data['password_error'] = 'Please enter a password';
             } elseif (strlen($data['password']) < 6) {
-                $data['password_error'] = "Password much be at least 6 characters";
+                $data['password_error'] = 'Password much be at least 6 characters';
             }
             if ($data['password'] !== $data['confirm_password']) {
                 $data['confirm_password_error'] = 'Passwords do not match';
@@ -69,10 +67,9 @@ class Users extends Controller
                     flash('register_success', 'You are now registered');
                     redirect('user/users/login');
                 } else {
-                    die('Something has gone wrong');
+                    throw new Exception('Failed to register - please try again');
                 }
             } else {
-                // Reloads the view with errors
                 $this->view('users/register', $data);
             }
         } else {
@@ -81,7 +78,7 @@ class Users extends Controller
         }
     }
 
-    public function login()
+    public function login(): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $data = [
@@ -102,15 +99,12 @@ class Users extends Controller
                 $loggedInUser = $this->userModel->login($data['email'], $data['password']);
 
                 if ($loggedInUser) {
-                    //Create session
                     $this->createUserSession($loggedInUser);
                 } else {
                     $data['password_error'] = 'Username and password do not match';
-                    // Reloads the view with errors
                     $this->view('users/login', $data);
                 }
             } else {
-                //No User exists
                 $data['email_error'] = 'No user Found';
             }
 
@@ -118,8 +112,6 @@ class Users extends Controller
                 $this->view('users/login', $data);
             }
         } else {
-            // Load the form
-            // Initialise the data
             $data = [
                 'email' => '',
                 'password' => '',
@@ -130,9 +122,8 @@ class Users extends Controller
         }
     }
 
-    public function logout()
+    public function logout(): void
     {
-        //TODO If these aren't used specifically - replace with simple Boolean
         unset($_SERVER['user_id']);
         unset($_SERVER['user_name']);
         unset($_SERVER['user_email']);

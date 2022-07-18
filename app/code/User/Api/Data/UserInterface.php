@@ -24,6 +24,4 @@ interface UserInterface {
 
     public function getCreatedAt() :string;
     public function setCreatedAt(string $datetime);
-
-
 }
