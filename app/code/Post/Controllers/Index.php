@@ -70,48 +70,49 @@ class Index extends Controller
      */
     public function edit($id): void
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $editedPost = new Post();
-
-            $editedPost->setTitle(trim($_POST['title']));
-            $editedPost->setBody(trim($_POST['body']));
-            $editedPost->setId(intval($id));
-            $editedPost->setUserId($_SESSION['user_id']);
-
-            $errors = [
-                'title_error' => '',
-                'body_error' => ''
-            ];
-
-            if (empty($editedPost->getTitle())) {
-                $errors['title_error'] = 'Please enter a title';
-            }
-
-            if (empty($editedPost->getBody())) {
-                $errors['body_error'] = 'Please enter some text';
-            }
-
-            if (empty($errors['title_error']) && empty($errors['body_error'])) {
-                $submissionRepositoryPost = new PostRepository();
-
-                try {
-                    $submissionRepositoryPost->save($editedPost);
-                    redirect('/posts/index/index');
-                } catch (Exception $e) {
-                    $this->errorHandler($e, '/posts/index/index');
-                }
-            } else {
-                $this->view('posts/edit', $editedPost, $errors);
-            }
-        } else {
+        if ($_SERVER['REQUEST_METHOD'] != 'POST') {
             $respositoryPost = new PostRepository();
             $post = $respositoryPost->getById(intval($id));
 
             if ($post->getUserId() != $_SESSION['user_id']) {
                 redirect('posts/index/index');
+                return;
             }
 
             $this->view('posts/edit', $post);
+            return;
+        }
+        $editedPost = new Post();
+
+        $editedPost->setTitle(trim($_POST['title']));
+        $editedPost->setBody(trim($_POST['body']));
+        $editedPost->setId(intval($id));
+        $editedPost->setUserId($_SESSION['user_id']);
+
+        $errors = [
+            'title_error' => '',
+            'body_error' => ''
+        ];
+
+        if (empty($editedPost->getTitle())) {
+            $errors['title_error'] = 'Please enter a title';
+        }
+
+        if (empty($editedPost->getBody())) {
+            $errors['body_error'] = 'Please enter some text';
+        }
+
+        if (empty($errors['title_error']) && empty($errors['body_error'])) {
+            $submissionRepositoryPost = new PostRepository();
+
+            try {
+                $submissionRepositoryPost->save($editedPost);
+                redirect('/posts/index/index');
+            } catch (Exception $e) {
+                $this->errorHandler($e, '/posts/index/index');
+            }
+        } else {
+            $this->view('posts/edit', $editedPost, $errors);
         }
     }
 
@@ -132,23 +133,24 @@ class Index extends Controller
      */
     public function delete($id): void
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $getRepositoryPost = new PostRepository();
-            $post = $getRepositoryPost->getById(intval($id));
-            $postid = $post->getUserId();
-
-            if ($postid != $_SESSION['user_id']) {
-                redirect('post/index/show/' . $id);
-            }
-            try {
-                $getRepositoryPost->deleteById(intval($id));
-                flash('post_message', 'Post removed successfully');
-                redirect('posts');
-            } catch (Exception $e) {
-                $this->errorHandler($e, 'pages/index/index');
-            }
-        } else {
+        if ($_SERVER['REQUEST_METHOD'] != 'POST') {
             redirect('post/index/show/' . $id);
+            return;
+        }
+
+        $getRepositoryPost = new PostRepository();
+        $post = $getRepositoryPost->getById(intval($id));
+        $postid = $post->getUserId();
+
+        if ($postid != $_SESSION['user_id']) {
+            redirect('post/index/show/' . $id);
+        }
+        try {
+            $getRepositoryPost->deleteById(intval($id));
+            flash('post_message', 'Post removed successfully');
+            redirect('posts');
+        } catch (Exception $e) {
+            $this->errorHandler($e, 'pages/index/index');
         }
     }
 }
