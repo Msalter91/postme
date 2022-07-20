@@ -1,13 +1,9 @@
 <?php
 require APPROOT . '/views/inc/header.php'; ?>
-
+<?php
+flash('post_message') ?>
 <h1>
-    <?php
-    echo $data['title'] ?>
+    We're having trouble conntecting to the Database right now!
 </h1>
-<br>
-<p><?= $data['description'] ?></p>
-<p><?= APP_VERSION ?></p>
-
 <?php
 require APPROOT . '/views/inc/footer.php'; ?>
