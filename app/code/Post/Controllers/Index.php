@@ -172,9 +172,8 @@ class Index extends Controller
         $user->addChild('username', $userInformation->getName());
         $user->addChild('useremail', $userInformation->getEmail());
 
-
-        header('Content-type: text/xml');
-        header('Content-Disposition: attachment; filename="your-new-xml.xml"');
-        readfile('your-new-xml.xml');
+//        header('Content-type: text/xml');
+//        header('Content-Disposition: attachment; filename="your-new-xml.xml"');
+//        readfile('your-new-xml.xml');
     }
 }
