@@ -16,7 +16,25 @@ class UserRepository implements UserRepositoryInterface
 
     public function getById(int $id): User
     {
+        $this->db->query('SELECT * FROM users WHERE id = :id');
 
+        $this->db->bind(':id', $id);
+
+        $result = $this->db->singleResult();
+
+        $user = new User();
+
+        if (!$result) {
+            $user->setEmail('');
+            return $user;
+        }
+
+        $user->setId($result->id);
+        $user->setEmail($result->email);
+        $user->setName($result->name);
+        $user->setPassword($result->password);
+
+        return $user;
     }
 
     public function getByEmail(string $email): User
@@ -63,4 +81,3 @@ class UserRepository implements UserRepositoryInterface
         }
     }
 }
-

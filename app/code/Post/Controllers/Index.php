@@ -153,4 +153,28 @@ class Index extends Controller
             $this->errorHandler($e, 'pages/index/index');
         }
     }
+
+    public function createXML($id)
+    {
+        $getRepositoryPost = new PostRepository();
+        $post = $getRepositoryPost->getById(intval($id));
+
+        $sxe = new SimpleXMLElement('<?xml version=\'1.0\' standalone=\'yes\'?><post></post>');
+        $sxe->addChild('Posttitle', $post->getTitle());
+        $sxe->addChild('body', $post->getBody());
+        $sxe->addChild('createdAt', $post->getCreatedAt());
+        $user = $sxe->addChild('user');
+
+        $repositoryUser = new UserRepository();
+        $userId = $post->getUserId();
+        $userInformation = $repositoryUser->getById($userId);
+
+        $user->addChild('username', $userInformation->getName());
+        $user->addChild('useremail', $userInformation->getEmail());
+
+
+        header('Content-type: text/xml');
+        header('Content-Disposition: attachment; filename="your-new-xml.xml"');
+        readfile('your-new-xml.xml');
+    }
 }
