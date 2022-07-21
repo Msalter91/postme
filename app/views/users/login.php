@@ -4,10 +4,15 @@ require APPROOT . '/views/inc/header.php'; ?>
     <div class="card">
         <div class="card-body mx-auto md-6">
             <?php
-            flash('register_success') ?>
+            flash('register_success');
+            $formKey = new FormKey();
+            ?>
+
             <h2>Login</h2>
+            <?= $errors['form_key_error'] ?>
             <form action="<?= URLROOT ?>/user/Users/login" method="post">
                 <div class="mb-3">
+                    <?php $formKey->outputKey(); ?>
                     <label for="email" class="form-label ">Email<sup>*</sup></label>
                     <input type="email" class="form-control
                 <?= (!empty($errors['email_error'])) ? "is-invalid" : "" ?>" id="email" name="email"

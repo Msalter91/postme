@@ -85,17 +85,27 @@ class Users extends Controller
 
     public function login(): void
     {
+
+        $formKey = new FormKey();
+
         $errors = [
             'name_error' => '',
             'email_error' => '',
+            'form_key_error' => '',
         ];
 
         if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+
             $user = new User();
             $this->view('users/login', $user, $errors);
             return;
         }
         $userToLogin = new User();
+
+        if(!isset($_POST['form_key']) || !$formKey->validate())
+        {
+            $errors['form_key_error'] = 'Form key error!';
+        }
 
         if (empty($_POST['email'])) {
             $errors['email_error'] = 'Please enter an email';
