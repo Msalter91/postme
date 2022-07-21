@@ -4,7 +4,10 @@ require APPROOT . '/views/inc/header.php'; ?>
     <div class="card card-body mx-auto md-6">
         <div class="card-body mx-auto md-6">
             <h2>Register for an account</h2>
+            <?= $errors['name_error'];
+            $formKey = new FormKey();?>
             <form action="<?= URLROOT ?>/user/users/register" method="post">
+                <?php $formKey->outputKey(); ?>
                 <div class="mb-3">
                     <label for="name" class="form-label ">Name<sup>*</sup></label>
                     <input type="text" class="form-control

@@ -26,6 +26,7 @@ class FormKey
     {
         $this->formKey = $this->generateKey();
         $_SESSION['form_key'] = $this->formKey;
+        echo "<input type='hidden' name='form_key' id='form_key' value='"  . $this->formKey . "' />";
     }
 
     public function validate(): bool

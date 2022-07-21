@@ -25,11 +25,15 @@ class Users extends Controller
 
     public function register(): void
     {
+
+        $formKey = new FormKey();
+
         $errors = [
             'name_error' => '',
             'email_error' => '',
             'password_error' => '',
-            'confirm_password_error' => ''
+            'confirm_password_error' => '',
+            'form_key_error' => '',
         ];
 
 
@@ -40,6 +44,10 @@ class Users extends Controller
         }
 
         $userToCreate = new User();
+
+        if (!isset($_POST['form_key']) || !$formKey->validate()) {
+            $errors['form_key_error'] = 'Form key error!';
+        }
 
         if (empty($_POST['email'])) {
             $errors['email_error'] = 'Please enter an email';
@@ -64,7 +72,8 @@ class Users extends Controller
         }
         if (
             !empty($errors['email_error']) || !empty($errors['password_error']) ||
-            !empty($errors['name_error']) || !empty($errors['confirm_password_error'])
+            !empty($errors['name_error']) || !empty($errors['confirm_password_error']
+            || !empty($errors['form_key_error']))
         ) {
             $this->view('users/register', $userToCreate, $errors);
             return;
@@ -102,8 +111,7 @@ class Users extends Controller
         }
         $userToLogin = new User();
 
-        if(!isset($_POST['form_key']) || !$formKey->validate())
-        {
+        if (!isset($_POST['form_key']) || !$formKey->validate()) {
             $errors['form_key_error'] = 'Form key error!';
         }
 
@@ -112,11 +120,12 @@ class Users extends Controller
         }
         if (empty($_POST['password'])) {
             $errors['password_error'] = 'Please enter a password';
-        } elseif (strlen($_POST['password']) < 6) {
-            $errors['password_error'] = 'Password much be at least 6 characters';
         }
 
-        if (!empty($errors['email_error']) || !empty($errors['password_error'])) {
+        if (
+            !empty($errors['email_error']) || !empty($errors['password_error'])
+            || !empty($errors['form_key_error'])
+        ) {
             $this->view('users/login', $userToLogin, $errors);
             return;
         }
