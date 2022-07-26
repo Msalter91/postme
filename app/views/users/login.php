@@ -7,7 +7,6 @@ require APPROOT . '/views/inc/header.php'; ?>
             flash('register_success');
             $formKey = new FormKey();
             ?>
-
             <h2>Login</h2>
             <?= $errors['form_key_error'] ?>
             <form action="<?= URLROOT ?>/user/Users/login" method="post">

@@ -13,7 +13,9 @@
     },
   "require": {
     "ext-pdo": "*",
-    "ext-simplexml": "*"
+    "ext-simplexml": "*",
+    "ext-fileinfo": "*",
+    "ext-mbstring": "*"
   },
   "scripts": {
     "phpcs": "phpcs --standard=PSR2"

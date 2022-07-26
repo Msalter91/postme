@@ -83,7 +83,7 @@ class PostRepository implements PostRepositoryInterface
             $this->db->execute();
             return $post;
         } catch (Exception $e) {
-            throw new Exception("Unable to upload post due to database problem");
+            throw new Exception($e->getMessage());
         }
     }
 
