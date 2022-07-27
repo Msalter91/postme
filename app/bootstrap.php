@@ -23,6 +23,7 @@ require_once 'helpers/Form_Key.php';
 require '../app/code/Post/Model/Post.php';
 require '../app/code/Post/Model/PostRepository.php';
 require '../app/code/User/Model/User.php';
+require '../app/code/Post/Model/Xml.php';
 require '../app/code/User/Model/UserRepository.php';
 
 // load libraries

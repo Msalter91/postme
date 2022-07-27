@@ -87,6 +87,19 @@ class PostRepository implements PostRepositoryInterface
         }
     }
 
+    public function checkOwner($id): bool
+    {
+        try {
+            $post = $this->getById($id);
+        } catch (Exception $e) {
+            throw new Exception('You are trying to edit a deleted post');
+        }
+        if ($post->getUserId() != $_SESSION['user_id']) {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * @return array
      * @throws Exception

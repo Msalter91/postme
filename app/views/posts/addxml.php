@@ -7,7 +7,7 @@ require APPROOT . '/views/inc/header.php'; ?>
         <div class="card-body md-6">
             <h2>Posting with XML</h2>
             <?php foreach ($errors as $error): ?>
-                <h3><?= $error ?></h3>
+                <?= $error ?>
             <?php endforeach; ?>
             <div class="container">
                 <div class="row">
