@@ -206,10 +206,7 @@ class Index extends Controller
         if (!property_exists('xmlFile', 'id')) {
             $post->setId((int)$xmlFile->id);
             try {
-                if (!$repositoryPost->checkOwner($post->getId())) {
-                    header('HTTP/1.1 401 Unauthorized');
-                    exit;
-                }
+                $repositoryPost->checkOwner($post->getId());
             } catch (Exception $e) {
                 $this->errorHandler($e, '/posts/index/index');
             }

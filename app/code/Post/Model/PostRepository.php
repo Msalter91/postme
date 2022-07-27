@@ -95,7 +95,7 @@ class PostRepository implements PostRepositoryInterface
             throw new Exception('You are trying to edit a deleted post');
         }
         if ($post->getUserId() != $_SESSION['user_id']) {
-            return false;
+            throw new Exception('You are not the owner of this post');
         }
         return true;
     }
