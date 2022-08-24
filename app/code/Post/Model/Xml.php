@@ -99,7 +99,6 @@ class Xml
 
         $destination = "/uploads/{$fileName}";
 
-
         if (
             move_uploaded_file(
                 $_FILES['file']['tmp_name'],
@@ -110,6 +109,6 @@ class Xml
                 '/Applications/XAMPP/xamppfiles/htdocs/postme/app/code/Post/Controllers' . $destination
             );
         }
-        throw new Exception('Unable to move file');
+            throw new Exception('Unable to move file');
     }
 }
