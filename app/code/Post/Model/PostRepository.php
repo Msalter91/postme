@@ -83,8 +83,21 @@ class PostRepository implements PostRepositoryInterface
             $this->db->execute();
             return $post;
         } catch (Exception $e) {
-            throw new Exception("Unable to upload post due to database problem");
+            throw new Exception($e->getMessage());
         }
+    }
+
+    public function checkOwner($id): bool
+    {
+        try {
+            $post = $this->getById($id);
+        } catch (Exception $e) {
+            throw new Exception('You are trying to edit a deleted post');
+        }
+        if ($post->getUserId() != $_SESSION['user_id']) {
+            throw new Exception('You are not the owner of this post');
+        }
+        return true;
     }
 
     /**

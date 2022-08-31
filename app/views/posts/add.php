@@ -1,6 +1,10 @@
 <?php
 require APPROOT . '/views/inc/header.php'; ?>
     <a href="<?= URLROOT ?>/posts" class="btn btn-light">Back <i class="fa fa-backward"></i> </a>
+    <a href="<?= URLROOT ?>/post/index/addxml" class="btn btn-info float-end">
+        Add post with XML
+        <i class="fa fa-file"></i>
+    </a>
     <div class="container text-center">
         <div class="card">
             <div class="card-body md-6">
