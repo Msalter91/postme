@@ -2,6 +2,7 @@
 
 // simple page redirect function
 
-function redirect($page) {
+function redirect($page)
+{
     header('location: ' . URLROOT . '/' . $page);
 }

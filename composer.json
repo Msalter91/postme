@@ -1,0 +1,23 @@
+{
+    "name": "msalter/postme",
+    "description": "A simple OOP post app",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Mike Salter",
+            "email": "mikey.l.salter@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.7"
+    },
+  "require": {
+    "ext-pdo": "*",
+    "ext-simplexml": "*",
+    "ext-fileinfo": "*",
+    "ext-mbstring": "*"
+  },
+  "scripts": {
+    "phpcs": "phpcs --standard=PSR2"
+  }
+}
