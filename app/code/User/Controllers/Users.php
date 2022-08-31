@@ -16,109 +16,141 @@ class Users extends Controller
 
     public function createUserSession(User $user)
     {
-        $_SESSION['user_id'] = $user->id;
-        $_SESSION['user_name'] = $user->name;
-        //TODO Nothing to prevent session fixation attacks here!
+        $_SESSION['user_id'] = $user->getId();
+        $_SESSION['user_name'] = $user->getName();
+        session_regenerate_id(true);
         redirect('pages/index/index');
     }
 
+
     public function register(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $userToCreate = new User();
 
-            $data = [
-                'name' => (trim($_POST['name'])),
-                'email' => (trim($_POST['email'])),
-                'password' => (trim($_POST['password'])),
-                'confirm_password' => (trim($_POST['confirm_password'])),
-                'name_error' => '',
-                'email_error' => '',
-                'password_error' => '',
-                'confirm_password_error' => ''
-            ];
+        $formKey = new FormKey();
 
-            if (empty($data['email'])) {
-                $data['email_error'] = 'Please enter an email';
-            } else {
-                if ($this->userModel->findUserByEmail($data['email'])) {
-                    $data['email_error'] = 'Email already in use';
-                }
-            }
-            if (empty($data['name'])) {
-                $data['name_error'] = 'Please enter a name';
-            }
-            if (empty($data['password'])) {
-                $data['password_error'] = 'Please enter a password';
-            } elseif (strlen($data['password']) < 6) {
-                $data['password_error'] = 'Password much be at least 6 characters';
-            }
-            if ($data['password'] !== $data['confirm_password']) {
-                $data['confirm_password_error'] = 'Passwords do not match';
-            }
+        $errors = [
+            'name_error' => '',
+            'email_error' => '',
+            'password_error' => '',
+            'confirm_password_error' => '',
+            'form_key_error' => '',
+        ];
 
-            if (
-                empty($data['email_error']) && empty($data['password_error']) &&
-                empty($data['name_error']) && empty($data['confirm_password_error'])
-            ) {
-                $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
 
-                if ($this->userModel->register($data)) {
-                    flash('register_success', 'You are now registered');
-                    redirect('user/users/login');
-                } else {
-                    throw new Exception('Failed to register - please try again');
-                }
-            } else {
-                $this->view('users/register', $data);
-            }
-        } else {
+        if ($_SERVER['REQUEST_METHOD'] != 'POST') {
             $user = new User();
-            $this->view('users/register', $user);
+            $this->view('users/register', $user, $errors);
+            return;
+        }
+
+        $userToCreate = new User();
+
+        if (!isset($_POST['form_key']) || !$formKey->validate()) {
+            $errors['form_key_error'] = 'Form key error!';
+        }
+
+        if (empty($_POST['email'])) {
+            $errors['email_error'] = 'Please enter an email';
+        }
+
+        $repositoryUser = new UserRepository();
+
+        if (empty($_POST['name'])) {
+            $errors['name_error'] = 'Please enter a name';
+        }
+        if (empty($_POST['password'])) {
+            $errors['password_error'] = 'Please enter a password';
+        } elseif (strlen($_POST['password']) < 6) {
+            $errors['password_error'] = 'Password much be at least 6 characters';
+        }
+        if ($_POST['password'] !== $_POST['confirm_password']) {
+            $errors['confirm_password_error'] = 'Passwords do not match';
+        }
+        $isExistingUser = $repositoryUser->getByEmail($_POST['email']);
+        if (!empty($isExistingUser->getEmail())) {
+            $errors['email_error'] = 'Email linked to another account';
+        }
+        if (
+            !empty($errors['email_error']) || !empty($errors['password_error']) ||
+            !empty($errors['name_error']) || !empty($errors['confirm_password_error']
+            || !empty($errors['form_key_error']))
+        ) {
+            $this->view('users/register', $userToCreate, $errors);
+            return;
+        } else {
+            $userToCreate->setPassword(password_hash($_POST['password'], PASSWORD_DEFAULT));
+            $userToCreate->setName($_POST['name']);
+            $userToCreate->setEmail($_POST['email']);
+
+            try {
+                $repositoryUser->save($userToCreate);
+                flash('register_success', 'You are now registered');
+                redirect('user/users/login');
+            } catch (Exception $e) {
+                throw new Exception('Failed to register - please try again');
+            }
         }
     }
 
     public function login(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $data = [
-                'email' => trim($_POST['email']),
-                'password' => trim($_POST['password']),
-                'email_error' => '',
-                'password_error' => '',
-            ];
-            if (empty($data['email'])) {
-                $data['email_error'] = 'Please enter an email';
-            }
-            if (empty($data['password'])) {
-                $data['password_error'] = 'Please enter a password';
-            } elseif (strlen($data['password']) < 6) {
-                $data['password_error'] = 'Password much be at least 6 characters';
-            }
-            if ($this->userModel->findUserByEmail($data['email'])) {
-                $loggedInUser = $this->userModel->login($data['email'], $data['password']);
 
-                if ($loggedInUser) {
-                    $this->createUserSession($loggedInUser);
-                } else {
-                    $data['password_error'] = 'Username and password do not match';
-                    $this->view('users/login', $data);
-                }
-            } else {
-                $data['email_error'] = 'No user Found';
-            }
+        $formKey = new FormKey();
 
-            if (!empty($data['email_error']) || !empty($data['password_error'])) {
-                $this->view('users/login', $data);
-            }
+        $errors = [
+            'name_error' => '',
+            'email_error' => '',
+            'form_key_error' => '',
+        ];
+
+        if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+
+            $user = new User();
+            $this->view('users/login', $user, $errors);
+            return;
+        }
+        $userToLogin = new User();
+
+        if (!isset($_POST['form_key']) || !$formKey->validate()) {
+            $errors['form_key_error'] = 'Form key error!';
+        }
+
+        if (empty($_POST['email'])) {
+            $errors['email_error'] = 'Please enter an email';
+        }
+        if (empty($_POST['password'])) {
+            $errors['password_error'] = 'Please enter a password';
+        }
+
+        if (
+            !empty($errors['email_error']) || !empty($errors['password_error'])
+            || !empty($errors['form_key_error'])
+        ) {
+            $this->view('users/login', $userToLogin, $errors);
+            return;
+        }
+
+        $userToLogin->setEmail($_POST['email']);
+        $userToLogin->setPassword($_POST['password']);
+
+        $repositoryUser = new UserRepository();
+
+        try {
+            $result = $repositoryUser->getByEmail($userToLogin->getEmail());
+        } catch (Exception $e) {
+            $errors['email_error'] = $e->getMessage();
+            $this->view('users/login', $userToLogin, $errors);
+            return;
+        }
+
+        if (password_verify($userToLogin->getPassword(), $result->getPassword())) {
+            $this->createUserSession($result);
         } else {
-            $data = [
-                'email' => '',
-                'password' => '',
-                'email_error' => '',
-                'password_error' => '',
-            ];
-            $this->view('users/login', $data);
+            $errors['password_error'] = 'Username and password do not match';
+            $this->view('users/login', $userToLogin, $errors);
+        }
+        if (!empty($errors['password_error'])) {
+            $this->view('users/login', $userToLogin, $errors);
         }
     }
 

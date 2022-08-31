@@ -10,8 +10,10 @@
     <?= htmlspecialchars($data->getBody()) ?>
 </p>
 
+<a href="<?= URLROOT?>/post/index/createXML/<?= $data->getId()?>" class="btn btn-info float-end">Dowload as XML</a>
+
 <?php
-if($data->getUserId() == $_SESSION['user_id']) : ?>
+if ($data->getUserId() == $_SESSION['user_id']) : ?>
 <hr>
     <a href="<?= URLROOT?>/post/index/edit/<?= $data->getId()?>" class="btn btn-dark">Edit</a>
 <form class="float-end" action="<?=URLROOT?>/post/index/delete/<?=$data->getId()?>" method="post">
